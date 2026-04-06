@@ -13,14 +13,61 @@ datasource db {
 }
 
 
+
 model User {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) 
+  email String @unique
+  password String
   firstName String
   lastName String
   phone String
-  email String @unique
-  password String
+  profilePicture String?
+  isVerified Boolean @default(false)
+  bio String?
+  eventsOfInterest String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  adminOfGroups Group[] @relation("GroupAdmins")
+  joinRequests JoinRequest[]
+  memberOfGroups Group[] @relation("GroupMembers")
 }
+
+model Otp{
+    id String @id @default(uuid()) 
+    email String @unique
+    otp String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+
+
+
+// Group Schema 
+model Group {
+    id String @id @default(uuid())
+    name String
+    description String
+    category String
+    image String
+    admins User[] @relation("GroupAdmins")
+    members User[] @relation("GroupMembers")
+    joinRequests JoinRequest[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+// Join Requests Schema 
+model JoinRequest {
+    id String @id @default(uuid())
+    userId String
+    groupId String
+    status String //pending , accepted , rejected
+    user User @relation(fields: [userId], references: [id])
+    group Group @relation(fields: [groupId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+} 
+// Post Schema 
+
 
