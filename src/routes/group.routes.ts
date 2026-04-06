@@ -10,5 +10,5 @@ router.get("/:id", getGroupController);
 router.delete("/:id", deleteGroupController);
 router.post("/:id/add-user", addUserToGroupController);
 router.post("/:id/remove-user", removeUserFromGroupController);
-router.get("/", getAuthUserGroupsController);
+router.get("/get-auth-user-groups", getAuthUserGroupsController);
 export default router;
