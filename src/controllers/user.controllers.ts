@@ -1,7 +1,7 @@
 import type { NextFunction , Response , Request } from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
-import { createOtpService, createUser as createUserService, deleteOtpService, deleteUserService, getOtpBtEmail, getUserByEmail, getUserById, updateUserService } from "../services/user.services.js";
+import { createOtpService, createUser as createUserService, deleteOtpService, deleteUserService, getOtpBtEmail, getUserByEmail, getUserById, getUserWithSearchService, updateUserService } from "../services/user.services.js";
 import type { LoginUser, User } from "../types/user.types.js";
 import { comparePassword, generateOtp, generateToken, hashPassword } from "../utils/helper.js";
 import type { userData } from "../types/auth.types.js";
@@ -324,4 +324,11 @@ export const deleteUserController = AsyncHandler(async (req: Request, res: Respo
         });
     }
     return SuccessHandler(res, {}, "User deleted successfully", "200");
+});
+
+export const getUserWithSearchController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const { search } = req.query as { search: string };
+    const users = await getUserWithSearchService(search);
+   
+    return SuccessHandler(res, { users }, "Users fetched successfully", "200");
 });

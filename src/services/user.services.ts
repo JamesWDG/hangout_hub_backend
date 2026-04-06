@@ -68,3 +68,17 @@ export const deleteUserService = async (id: string) => {
 
     return user;
 };
+
+export const getUserWithSearchService = async (search: string) => {
+    const users = await prisma.user.findMany({
+        where: {
+            OR: [
+                { firstName: { contains: search, mode: "insensitive" } },
+                { lastName: { contains: search, mode: "insensitive" } },
+                { email: { contains: search, mode: "insensitive" } },
+                { phone: { contains: search, mode: "insensitive" } },
+            ],
+        },
+    });
+    return users;
+};

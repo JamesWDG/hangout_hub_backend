@@ -1,7 +1,7 @@
 import type { NextFunction  , Response , Request} from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import type { GroupType } from "../types/group.types.js";
-import { addUserToGroupService, createGroupService, deleteGroupService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
+import { addUserToGroupService, createGroupService, deleteGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
@@ -74,4 +74,18 @@ export const removeUserFromGroupController = AsyncHandler(async (req: Request, r
         });
     }
     return SuccessHandler(res, { group }, "User removed from group successfully", "200");
+});
+
+export const getAuthUserGroupsController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const userId = (req as Request & { user: { id: string } }).user.id;
+    const groups = await getAuthUserGroupsService(userId);
+    if(!groups){
+        return next({
+            statusCode: 400,
+            message: "Failed to fetch groups",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { groups }, "Groups fetched successfully", "200");
 });

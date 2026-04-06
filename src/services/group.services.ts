@@ -41,3 +41,10 @@ export const removeUserFromGroupService = async (id: string, userId: string) => 
     });
     return group;
 };
+
+export const getAuthUserGroupsService = async (userId: string) => {
+    const groups = await prisma.group.findMany({
+        where: { admins: { some: { id: userId } } },
+    });
+    return groups;
+};
