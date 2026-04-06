@@ -1,24 +1,13 @@
 import "dotenv/config";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../generated/prisma/client.js";
-import { applicationConfig } from "../constant.js";
 
+const connectionString = process.env.DATABASE_URL;
+if (connectionString == null || connectionString === "") {
+  throw new Error("DATABASE_URL is not set");
+}
 
-function requireEnv(name: string, value: string | undefined): string {
-    if (value == null || value === "") {
-      throw new Error(`Missing required environment variable: ${name}`);
-    }
-    return value;
-  }
-
-// const adapter = new PrismaMariaDb({
-//   host: requireEnv("DATABASE_HOST", applicationConfig.DATABASE_HOST),
-//   user: requireEnv("DATABASE_USER", applicationConfig.DATABASE_USER),
-//   password: requireEnv("DATABASE_PASSWORD", applicationConfig.DATABASE_PASSWORD),
-//   database: requireEnv("DATABASE_NAME", applicationConfig.DATABASE_NAME),
-//   connectionLimit: 5,
-// });
-const adapter = new PrismaMariaDb(requireEnv("DATABASE_URL" , applicationConfig.DATABASE_URL));
+const adapter = new PrismaPg(connectionString);
 const prisma = new PrismaClient({ adapter });
 
 export { prisma };
