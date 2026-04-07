@@ -44,9 +44,21 @@ export const removeUserFromGroupService = async (id: string, userId: string) => 
 
 export const getAuthUserGroupsService = async (userId: string) => {
 
-    console.log("userId ===>",userId)
     const groups = await prisma.group.findMany({
         where: { admins: { some: { id: userId } } },
+        include: {
+            admins: true,
+            members: true,
+        },
     });
     return groups;
+};
+
+
+export const editUserInGroupService = async (id: string, data: any) => {
+    const group = await prisma.group.update({
+        where: { id },
+        data,
+    });
+    return group;
 };

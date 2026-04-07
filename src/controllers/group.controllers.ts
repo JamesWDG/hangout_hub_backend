@@ -1,7 +1,7 @@
 import type { NextFunction  , Response , Request} from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import type { GroupType } from "../types/group.types.js";
-import { addUserToGroupService, createGroupService, deleteGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
+import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
@@ -94,4 +94,25 @@ export const getAuthUserGroupsController = AsyncHandler(async (req: Request, res
         });
     }
     return SuccessHandler(res, { groups }, "Groups fetched successfully", "200");
+});
+
+
+export const editUserInGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const { id } = req.params;
+    const  userId  = (req as any).user?.id;
+    const data =  req.body
+
+
+    if(req.file && req.file.filename){
+        data.image = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+    const group = await editUserInGroupService(id as string,data);
+    if(!group){
+        return next({
+            statusCode: 400,
+            message: "Failed to edit user in group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }    return SuccessHandler(res, { group }, "User edited in group successfully", "200");
 });
