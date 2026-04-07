@@ -43,6 +43,8 @@ export const removeUserFromGroupService = async (id: string, userId: string) => 
 };
 
 export const getAuthUserGroupsService = async (userId: string) => {
+
+    console.log("userId ===>",userId)
     const groups = await prisma.group.findMany({
         where: { admins: { some: { id: userId } } },
     });

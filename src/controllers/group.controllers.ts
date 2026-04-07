@@ -5,15 +5,19 @@ import { addUserToGroupService, createGroupService, deleteGroupService, getAuthU
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
-    console.log("req.body ===>",req.body)
-    const { name, description, category, image  , groupAdmins , groupMembers} : GroupType = req.body as GroupType;
+
+    let image = "";
+    if (req.file && req.file.filename) {
+      image = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+    const { name, description, category  , groupAdmins , groupMembers} : GroupType = req.body as GroupType;
     const data = {
         name ,
         description,
         category,
         image,
-        admins:{connect : groupAdmins.map((admin) => ({id: admin.id}))},
-        members:{connect : groupMembers.map((member) => ({id: member.id}))},
+        admins:{connect : JSON.parse(groupAdmins as unknown as any).map((admin: any) => ({id: admin.id}))},
+        members:{connect : JSON.parse(groupMembers as unknown as any).map((member: any) => ({id: member.id}))},
     }
     const group = await createGroupService(data as unknown as GroupType);
     return SuccessHandler(res, { group }, "Group created successfully", "201");
@@ -79,6 +83,7 @@ export const removeUserFromGroupController = AsyncHandler(async (req: Request, r
 
 export const getAuthUserGroupsController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const userId = (req as Request & { user: { id: string } }).user.id;
+   
     const groups = await getAuthUserGroupsService(userId);
     if(!groups){
         return next({
