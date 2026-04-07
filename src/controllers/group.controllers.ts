@@ -5,6 +5,7 @@ import { addUserToGroupService, createGroupService, deleteGroupService, getAuthU
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    console.log("req.body ===>",req.body)
     const { name, description, category, image  , groupAdmins , groupMembers} : GroupType = req.body as GroupType;
     const data = {
         name ,

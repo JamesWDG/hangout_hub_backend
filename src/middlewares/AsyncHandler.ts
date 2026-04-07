@@ -5,6 +5,7 @@ export const AsyncHandler = (fn: Function) => {
         try {
             await fn(req, res, next);
         } catch (error) {
+            console.log("error ===>",error)
             next(error);
         }
     };
