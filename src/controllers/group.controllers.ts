@@ -1,7 +1,7 @@
 import type { NextFunction  , Response , Request} from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import type { GroupType } from "../types/group.types.js";
-import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
+import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
@@ -21,6 +21,33 @@ export const createGroupController = AsyncHandler(async (req: Request, res: Resp
     }
     const group = await createGroupService(data as unknown as GroupType);
     return SuccessHandler(res, { group }, "Group created successfully", "201");
+});
+
+export const updateGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const { id } = req.params;
+    let image = "";
+    if (req.file && req.file.filename) {
+      image = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+    const { name, description, category, groupAdmins, groupMembers } : GroupType = req.body as GroupType;
+    const data = {
+        name,
+        description,
+        category,
+        image,
+        admins:{connect : JSON.parse(groupAdmins as unknown as any).map((admin: any) => ({id: admin.id}))},
+        members:{connect : JSON.parse(groupMembers as unknown as any).map((member: any) => ({id: member.id}))},
+    }
+    const group = await updateGroupService(id as string, data as unknown as GroupType);
+    if(!group){
+        return next({
+            statusCode: 400,
+            message: "Failed to update group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { group }, "Group updated successfully", "200");
 });
 
 export const getGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {

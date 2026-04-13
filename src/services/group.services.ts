@@ -7,6 +7,13 @@ export const createGroupService = async (groupData: GroupType) => {
     return group;
 };
 
+export const updateGroupService = async (id: string, groupData: GroupType) => {
+    const group = await prisma.group.update({
+        where: { id },
+        data: groupData,
+    });
+    return group;
+};
 export const getGroupService = async (id: string) => {
     const group = await prisma.group.findUnique({
         where: { id },
