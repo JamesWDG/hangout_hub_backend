@@ -25,10 +25,10 @@ export const deleteGroupService = async (id: string) => {
     return group;
 };
 
-export const addUserToGroupService = async (id: string, userId: string) => {
+export const addUserToGroupService = async (id: string, userIds: {id: string}[]) => {
     const group = await prisma.group.update({
         where: { id },
-        data: { members: { connect: { id: userId } } },
+        data: { members: { connect: userIds.map((user: {id: string}) => ({ id: user.id })) } },
     });
     return group;
 };

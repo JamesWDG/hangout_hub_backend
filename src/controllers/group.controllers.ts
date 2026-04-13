@@ -53,8 +53,8 @@ export const deleteGroupController = AsyncHandler(async (req: Request, res: Resp
 
 export const addUserToGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { id } = req.params;
-    const { userId } = req.body;
-    const group = await addUserToGroupService(id as string, userId as string);
+    const { userIds } : {userIds: {id: string}[]} = req.body as {userIds: {id: string}[]};
+    const group = await addUserToGroupService(id as string, userIds);
     if(!group){
         return next({
             statusCode: 400,
