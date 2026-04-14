@@ -18,5 +18,5 @@ router.delete("/delete-user", deleteUserController);
 router.get("/get-auth-user", getUserController);
 router.put("/change-password",  changePasswordController);
 router.put("/update-user", upload.single("profilePicture"), updateUserController);
-router.get("/get-user-with-search", getUserWithSearchController);
+router.get("/get-user-with-search/search", getUserWithSearchController);
 export default router;
