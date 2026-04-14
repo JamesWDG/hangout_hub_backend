@@ -327,7 +327,9 @@ export const deleteUserController = AsyncHandler(async (req: Request, res: Respo
 });
 
 export const getUserWithSearchController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    
     const { search } = req.query as { search: string };
+    console.log(search , "sssssssssssss")
     const users = await getUserWithSearchService(search);
    
     return SuccessHandler(res, { users }, "Users fetched successfully", "200");
