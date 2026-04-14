@@ -3,12 +3,13 @@ import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import type { GroupType } from "../types/group.types.js";
 import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
+import { applicationConfig } from "../constant.js";
 
 export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
 
     let image = "";
     if (req.file && req.file.filename) {
-      image = `${process.env.BASE_URL}/${req.file.filename}`;
+      image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
     }
     const { name, description, category  , groupAdmins , groupMembers} : GroupType = req.body as GroupType;
     const data = {
@@ -27,7 +28,7 @@ export const updateGroupController = AsyncHandler(async (req: Request, res: Resp
     const { id } = req.params;
     let image = "";
     if (req.file && req.file.filename) {
-      image = `${process.env.BASE_URL}/${req.file.filename}`;
+        image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
     }
     const { name, description, category, groupAdmins, groupMembers } : GroupType = req.body as GroupType;
     const data = {

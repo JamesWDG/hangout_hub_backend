@@ -5,6 +5,7 @@ import { createOtpService, createUser as createUserService, deleteOtpService, de
 import type { LoginUser, User } from "../types/user.types.js";
 import { comparePassword, generateOtp, generateToken, hashPassword } from "../utils/helper.js";
 import type { userData } from "../types/auth.types.js";
+import { applicationConfig } from "../constant.js";
 export const createUserController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
 
     if(!req.body){
@@ -288,7 +289,7 @@ export const changePasswordController = AsyncHandler(async (req: Request, res: R
 
 export const updateUserController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
 
-   const profilePicture = req.file?.filename ? `${process.env.BASE_URL}/${req.file.filename}` : null;
+   const profilePicture = req.file?.filename ? `${applicationConfig.BASE_URL}/${req.file.filename}` : null;
     
 
 
