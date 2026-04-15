@@ -26,9 +26,9 @@ export declare const getAllJoinRequestsForAGroupService: (groupId: string) => Pr
         createdAt: Date;
         updatedAt: Date;
         name: string;
+        image: string;
         description: string;
         category: string;
-        image: string;
     };
 } & {
     id: string;

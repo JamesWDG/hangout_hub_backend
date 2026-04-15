@@ -7,9 +7,24 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('uploads'));
-app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/group", groupRoutes);
-app.use("/api/v1/joinRequest", joinRequestRoutes);
+const mountApi = (base) => {
+    app.use(`${base}/user`, userRoutes);
+    app.use(`${base}/group`, groupRoutes);
+    app.use(`${base}/joinRequest`, joinRequestRoutes);
+};
+// Full path: /api/v1/...
+mountApi("/api/v1");
+// // If nginx uses `proxy_pass http://127.0.0.1:PORT/;` the /api prefix is stripped and Node sees /v1/... only
+// mountApi("/v1");
 app.use(ErrorHandler);
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Not found",
+        method: req.method,
+        path: req.path,
+        originalUrl: req.originalUrl,
+    });
+});
 export default app;
 //# sourceMappingURL=app.js.map

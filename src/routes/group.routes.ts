@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createGroupController, deleteGroupController, getGroupController, addUserToGroupController, removeUserFromGroupController, getAuthUserGroupsController, editUserInGroupController, updateGroupController } from "../controllers/group.controllers.js";
+import { createGroupController, deleteGroupController, getGroupController, addUserToGroupController, removeUserFromGroupController, getAuthUserGroupsController, editUserInGroupController, updateGroupController, getAllGroupsController } from "../controllers/group.controllers.js";
 import { AuthHandler } from "../middlewares/AuthHandler.js";
 import { optionalImageUpload, upload } from "../config/fileUpload.js";
 
@@ -21,5 +21,5 @@ router.post("/:id/edit-user", upload.single("image"), editUserInGroupController)
 router.get("/:id", getGroupController);
 router.put("/:id", optionalImageUpload, updateGroupController);
 router.delete("/:id", deleteGroupController);
-
+router.get("/get-all-groups", getAllGroupsController);
 export default router;

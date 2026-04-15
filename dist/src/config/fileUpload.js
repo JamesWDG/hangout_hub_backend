@@ -9,4 +9,12 @@ const storage = multer.diskStorage({
     },
 });
 export const upload = multer({ storage });
+/** Skip multer for JSON/urlencoded so POST/PUT update works with `application/json`. */
+export const optionalImageUpload = (req, res, next) => {
+    const ct = req.headers["content-type"] ?? "";
+    if (typeof ct === "string" && ct.includes("multipart/form-data")) {
+        return upload.single("image")(req, res, next);
+    }
+    next();
+};
 //# sourceMappingURL=fileUpload.js.map

@@ -69,3 +69,24 @@ export const editUserInGroupService = async (id: string, data: any) => {
     });
     return group;
 };
+
+export const getAllGroupsService = async (page: number, limit: number, category: string , search: string) => {
+    const skip = (page - 1) * limit;
+    const groups = await prisma.group.findMany({
+        where: {
+           category: { contains: category, mode: "insensitive" },
+           OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+            { category: { contains: search, mode: "insensitive" } },
+           ],
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+            admins: true,
+            members: true,
+        },
+    });
+    return groups;
+};

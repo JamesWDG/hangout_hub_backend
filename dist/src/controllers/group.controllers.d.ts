@@ -7,4 +7,5 @@ export declare const addUserToGroupController: (req: Request, res: Response, nex
 export declare const removeUserFromGroupController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getAuthUserGroupsController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const editUserInGroupController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getAllGroupsController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=group.controllers.d.ts.map
