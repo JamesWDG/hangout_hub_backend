@@ -70,7 +70,13 @@ export const editUserInGroupService = async (id: string, data: any) => {
     return group;
 };
 
-export const getAllGroupsService = async (page: number, limit: number, category: string , search: string) => {
+export const getAllGroupsService = async (
+    page: number,
+    limit: number,
+    category: string,
+    search: string,
+    userId: string,
+) => {
     const skip = (page - 1) * limit;
     const whereClause = {
         ...(category ? { category: { contains: category, mode: "insensitive" as const } } : {}),
@@ -94,8 +100,15 @@ export const getAllGroupsService = async (page: number, limit: number, category:
     });
     const total = await prisma.group.count({ where: whereClause });
 
+    const groupsWithMembership = groups.map((group) => ({
+        ...group,
+        isMemberOrAdmin:
+            group.admins.some((a) => a.id === userId) ||
+            group.members.some((m) => m.id === userId),
+    }));
+
     return {
-        groups,
+        groups: groupsWithMembership,
         total,
         page,
         limit,

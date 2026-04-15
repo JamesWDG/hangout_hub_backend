@@ -131,8 +131,9 @@ export declare const editUserInGroupService: (id: string, data: any) => Promise<
     description: string;
     category: string;
 }>;
-export declare const getAllGroupsService: (page: number, limit: number, category: string, search: string) => Promise<{
-    groups: ({
+export declare const getAllGroupsService: (page: number, limit: number, category: string, search: string, userId: string) => Promise<{
+    groups: {
+        isMemberOrAdmin: boolean;
         admins: {
             id: string;
             email: string;
@@ -161,7 +162,6 @@ export declare const getAllGroupsService: (page: number, limit: number, category
             createdAt: Date;
             updatedAt: Date;
         }[];
-    } & {
         id: string;
         createdAt: Date;
         updatedAt: Date;
@@ -169,7 +169,7 @@ export declare const getAllGroupsService: (page: number, limit: number, category
         image: string;
         description: string;
         category: string;
-    })[];
+    }[];
     total: number;
     page: number;
     limit: number;
