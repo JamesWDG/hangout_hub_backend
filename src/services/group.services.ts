@@ -80,6 +80,7 @@ export const getAllGroupsService = async (
     const skip = (page - 1) * limit;
     const whereClause = {
         ...(category ? { category: { contains: category, mode: "insensitive" as const } } : {}),
+        ...(userId ? { admins: { some: { id: userId } } } : {}),
         ...(search ? {
             OR: [
                 { name: { contains: search, mode: "insensitive" as const } },
