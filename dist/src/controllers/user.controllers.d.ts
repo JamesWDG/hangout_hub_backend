@@ -9,4 +9,5 @@ export declare const resetPasswordController: (req: Request, res: Response, next
 export declare const changePasswordController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const updateUserController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const deleteUserController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getUserWithSearchController: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=user.controllers.d.ts.map

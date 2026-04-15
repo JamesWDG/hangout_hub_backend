@@ -8,6 +8,15 @@ export declare const createGroupService: (groupData: GroupType) => Promise<{
     category: string;
     image: string;
 }>;
+export declare const updateGroupService: (id: string, groupData: GroupType) => Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    description: string;
+    category: string;
+    image: string;
+}>;
 export declare const getGroupService: (id: string) => Promise<({
     admins: {
         id: string;
@@ -55,7 +64,9 @@ export declare const deleteGroupService: (id: string) => Promise<{
     category: string;
     image: string;
 }>;
-export declare const addUserToGroupService: (id: string, userId: string) => Promise<{
+export declare const addUserToGroupService: (id: string, userIds: {
+    id: string;
+}[]) => Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -65,6 +76,53 @@ export declare const addUserToGroupService: (id: string, userId: string) => Prom
     image: string;
 }>;
 export declare const removeUserFromGroupService: (id: string, userId: string) => Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    description: string;
+    category: string;
+    image: string;
+}>;
+export declare const getAuthUserGroupsService: (userId: string) => Promise<({
+    admins: {
+        id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    members: {
+        id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+} & {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    description: string;
+    category: string;
+    image: string;
+})[]>;
+export declare const editUserInGroupService: (id: string, data: any) => Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;

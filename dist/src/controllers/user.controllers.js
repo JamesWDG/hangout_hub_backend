@@ -1,7 +1,8 @@
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
-import { createOtpService, createUser as createUserService, deleteOtpService, deleteUserService, getOtpBtEmail, getUserByEmail, getUserById, updateUserService } from "../services/user.services.js";
+import { createOtpService, createUser as createUserService, deleteOtpService, deleteUserService, getOtpBtEmail, getUserByEmail, getUserById, getUserWithSearchService, updateUserService } from "../services/user.services.js";
 import { comparePassword, generateOtp, generateToken, hashPassword } from "../utils/helper.js";
+import { applicationConfig } from "../constant.js";
 export const createUserController = AsyncHandler(async (req, res, next) => {
     if (!req.body) {
         return next({
@@ -239,7 +240,7 @@ export const changePasswordController = AsyncHandler(async (req, res, next) => {
     return SuccessHandler(res, {}, "Password changed successfully", "200");
 });
 export const updateUserController = AsyncHandler(async (req, res, next) => {
-    const profilePicture = req.file?.filename ? `${process.env.BASE_URL}/${req.file.filename}` : null;
+    const profilePicture = req.file?.filename ? `${applicationConfig.BASE_URL}/${req.file.filename}` : null;
     const { firstName, lastName, phone, bio, eventsOfInterest } = req.body;
     const user = req.user;
     const updatedUser = await updateUserService(user.id, { firstName, lastName, phone, profilePicture, bio, eventsOfInterest });
@@ -265,5 +266,11 @@ export const deleteUserController = AsyncHandler(async (req, res, next) => {
         });
     }
     return SuccessHandler(res, {}, "User deleted successfully", "200");
+});
+export const getUserWithSearchController = AsyncHandler(async (req, res, next) => {
+    const { search } = req.query;
+    console.log(search, "sssssssssssss");
+    const users = await getUserWithSearchService(search);
+    return SuccessHandler(res, { users }, "Users fetched successfully", "200");
 });
 //# sourceMappingURL=user.controllers.js.map

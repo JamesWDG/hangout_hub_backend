@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { createJoinRequestController, getAllJoinRequestsForAGroupController, acceptOrRejectJoinRequestController } from "../controllers/joinRequest.controllers.js";
+import { AuthHandler } from "../middlewares/AuthHandler.js";
 const router = Router();
+router.use(AuthHandler);
 router.post("/create", createJoinRequestController);
 router.get("/:id", getAllJoinRequestsForAGroupController);
 router.put("/:id/accept", acceptOrRejectJoinRequestController);

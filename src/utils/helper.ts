@@ -11,11 +11,19 @@ export const hashPassword = async (password: string) => {
 };
 
 export const verifyToken = async (token: string) => {
-    return await jwt.verify(token, process.env.JWT_SECRET as string);
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        return null;
+    }
+    try {
+        return jwt.verify(token, secret);
+    } catch {
+        return null;
+    }
 };
 
 export const generateToken = async (userData: Omit<User, "password"> & { id: string }) => {
-    return await jwt.sign({ userData }, process.env.JWT_SECRET as string, { expiresIn: "1h" });
+    return await jwt.sign({ userData }, process.env.JWT_SECRET as string, { expiresIn: "1d" });
 };
 
 export const generateOtp = async (userId: string) => {

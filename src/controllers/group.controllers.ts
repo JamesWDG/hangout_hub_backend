@@ -5,40 +5,106 @@ import { addUserToGroupService, createGroupService, deleteGroupService, editUser
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 import { applicationConfig } from "../constant.js";
 
-export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
-
-    let image = "";
-    if (req.file && req.file.filename) {
-      image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
+/**
+ * React Native often serializes FormData as JSON: `{ data: { _parts: [['name', v], ...] } }`.
+ * That is not multipart, so multer never runs — flatten so fields + image `{ uri }` are readable.
+ */
+function flattenRequestBody(req: Request): Record<string, unknown> {
+    const raw = req.body as Record<string, unknown>;
+    if (!raw || typeof raw !== "object") {
+        return {};
     }
-    const { name, description, category  , groupAdmins , groupMembers} : GroupType = req.body as GroupType;
+    const nested = raw["data"];
+    if (nested && typeof nested === "object" && nested !== null && "_parts" in nested) {
+        const parts = (nested as { _parts: unknown })._parts;
+        const out: Record<string, unknown> = { ...raw };
+        if (Array.isArray(parts)) {
+            for (const item of parts) {
+                if (Array.isArray(item) && item.length >= 2) {
+                    out[String(item[0])] = item[1];
+                }
+            }
+        }
+        return out;
+    }
+    if (nested && typeof nested === "object" && nested !== null && !("_parts" in nested)) {
+        return { ...raw, ...(nested as Record<string, unknown>) };
+    }
+    return raw;
+}
+
+function pickGroupImageUrl(req: Request, flat: Record<string, unknown>): string {
+    if (req.file?.filename) {
+        const base = applicationConfig.BASE_URL ?? "";
+        return `${base}/${req.file.filename}`;
+    }
+    const img = flat["image"] ?? flat["Image"];
+    if (typeof img === "string" && img.trim()) {
+        return img.trim();
+    }
+    if (img && typeof img === "object" && "uri" in img) {
+        const u = String((img as { uri: string }).uri ?? "").trim();
+        if (u.startsWith("http://") || u.startsWith("https://")) {
+            return u;
+        }
+    }
+    return "";
+}
+
+/** FormData sends JSON fields as strings; JSON bodies send arrays — support both */
+function parseUserConnectList(raw: unknown): { id: string }[] {
+    if (raw == null || raw === "") {
+        return [];
+    }
+    try {
+        const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+        return parsed.map((item: { id: string }) => ({ id: item.id }));
+    } catch {
+        return [];
+    }
+}
+
+export const createGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const flat = flattenRequestBody(req);
+    const image = pickGroupImageUrl(req, flat);
+    const { name, description, category, groupAdmins, groupMembers } = flat as unknown as GroupType;
+    if (!image) {
+        return next({
+            statusCode: 400,
+            message:
+                'Image required: send multipart field "image", or JSON with image URL string / { "uri": "https://..." }',
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
     const data = {
-        name ,
+        name,
         description,
         category,
         image,
-        admins:{connect : JSON.parse(groupAdmins as unknown as any).map((admin: any) => ({id: admin.id}))},
-        members:{connect : JSON.parse(groupMembers as unknown as any).map((member: any) => ({id: member.id}))},
-    }
+        admins: { connect: parseUserConnectList(groupAdmins as unknown) },
+        members: { connect: parseUserConnectList(groupMembers as unknown) },
+    };
     const group = await createGroupService(data as unknown as GroupType);
     return SuccessHandler(res, { group }, "Group created successfully", "201");
 });
 
 export const updateGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { id } = req.params;
-    let image = "";
-    if (req.file && req.file.filename) {
-        image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
-    }
-    const { name, description, category, groupAdmins, groupMembers } : GroupType = req.body as GroupType;
+    const flat = flattenRequestBody(req);
+    const imageUrl = pickGroupImageUrl(req, flat);
+    const { name, description, category, groupAdmins, groupMembers } = flat as unknown as GroupType;
     const data = {
         name,
         description,
         category,
-        image,
-        admins:{connect : JSON.parse(groupAdmins as unknown as any).map((admin: any) => ({id: admin.id}))},
-        members:{connect : JSON.parse(groupMembers as unknown as any).map((member: any) => ({id: member.id}))},
-    }
+        ...(imageUrl ? { image: imageUrl } : {}),
+        admins: { connect: parseUserConnectList(groupAdmins as unknown) },
+        members: { connect: parseUserConnectList(groupMembers as unknown) },
+    };
     const group = await updateGroupService(id as string, data as unknown as GroupType);
     if(!group){
         return next({

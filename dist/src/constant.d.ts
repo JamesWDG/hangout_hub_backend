@@ -1,5 +1,6 @@
 import "dotenv/config";
 export declare const applicationConfig: {
+    BASE_URL: string | undefined;
     PORT: string | number;
     DATABASE_URL: string | undefined;
     DATABASE_USER: string | undefined;

@@ -90,4 +90,18 @@ export declare const deleteUserService: (id: string) => Promise<{
     createdAt: Date;
     updatedAt: Date;
 }>;
+export declare const getUserWithSearchService: (search: string) => Promise<{
+    id: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    profilePicture: string | null;
+    isVerified: boolean;
+    bio: string | null;
+    eventsOfInterest: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+}[]>;
 //# sourceMappingURL=user.services.d.ts.map

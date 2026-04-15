@@ -1,1 +1,1 @@
-{"version":3,"file":"AuthHandler.d.ts","sourceRoot":"","sources":["../../../src/middlewares/AuthHandler.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,YAAY,EAAE,OAAO,EAAE,MAAM,SAAS,CAAC;AAMrD,eAAO,MAAM,WAAW,sFAwBtB,CAAC"}
+{"version":3,"file":"AuthHandler.d.ts","sourceRoot":"","sources":["../../../src/middlewares/AuthHandler.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,YAAY,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAY/D,eAAO,MAAM,WAAW,oEAuBtB,CAAC"}

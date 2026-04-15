@@ -7,10 +7,19 @@ export const hashPassword = async (password) => {
     return await bcrypt.hash(password, 10);
 };
 export const verifyToken = async (token) => {
-    return await jwt.verify(token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        return null;
+    }
+    try {
+        return jwt.verify(token, secret);
+    }
+    catch {
+        return null;
+    }
 };
 export const generateToken = async (userData) => {
-    return await jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    return await jwt.sign({ userData }, process.env.JWT_SECRET, { expiresIn: "1d" });
 };
 export const generateOtp = async (userId) => {
     // const otp = Math.floor(100000 + Math.random() * 900000);

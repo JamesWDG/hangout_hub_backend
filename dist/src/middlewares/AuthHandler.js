@@ -1,25 +1,28 @@
 import { AsyncHandler } from "./AsyncHandler.js";
 import { verifyToken } from "../utils/helper.js";
-export const AuthHandler = AsyncHandler(async (req, res, next) => {
-    const token = req.headers.authorization?.split(" ")[1];
+const unauthorized = (message = "Unauthorized") => ({
+    statusCode: 401,
+    message,
+    stack: new Error().stack,
+    status: "401",
+});
+export const AuthHandler = AsyncHandler(async (req, _res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+        ? authHeader.slice("Bearer ".length).trim()
+        : undefined;
     if (!token) {
-        return next({
-            statusCode: 401,
-            message: "Unauthorized",
-            stack: new Error().stack,
-            status: "401",
-        });
+        return next(unauthorized());
     }
     const decoded = await verifyToken(token);
-    if (!decoded) {
-        return next({
-            statusCode: 401,
-            message: "Unauthorized",
-            stack: new Error().stack,
-            status: "401",
-        });
+    if (!decoded || typeof decoded === "string") {
+        return next(unauthorized());
     }
-    req.user = decoded.userData;
+    const payload = decoded;
+    if (!payload.userData) {
+        return next(unauthorized());
+    }
+    req.user = payload.userData;
     return next();
 });
 //# sourceMappingURL=AuthHandler.js.map

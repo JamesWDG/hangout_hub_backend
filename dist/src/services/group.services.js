@@ -5,6 +5,13 @@ export const createGroupService = async (groupData) => {
     });
     return group;
 };
+export const updateGroupService = async (id, groupData) => {
+    const group = await prisma.group.update({
+        where: { id },
+        data: groupData,
+    });
+    return group;
+};
 export const getGroupService = async (id) => {
     const group = await prisma.group.findUnique({
         where: { id },
@@ -21,10 +28,10 @@ export const deleteGroupService = async (id) => {
     });
     return group;
 };
-export const addUserToGroupService = async (id, userId) => {
+export const addUserToGroupService = async (id, userIds) => {
     const group = await prisma.group.update({
         where: { id },
-        data: { members: { connect: { id: userId } } },
+        data: { members: { connect: userIds.map((user) => ({ id: user.id })) } },
     });
     return group;
 };
@@ -32,6 +39,23 @@ export const removeUserFromGroupService = async (id, userId) => {
     const group = await prisma.group.update({
         where: { id },
         data: { members: { disconnect: { id: userId } } },
+    });
+    return group;
+};
+export const getAuthUserGroupsService = async (userId) => {
+    const groups = await prisma.group.findMany({
+        where: { admins: { some: { id: userId } } },
+        include: {
+            admins: true,
+            members: true,
+        },
+    });
+    return groups;
+};
+export const editUserInGroupService = async (id, data) => {
+    const group = await prisma.group.update({
+        where: { id },
+        data,
     });
     return group;
 };

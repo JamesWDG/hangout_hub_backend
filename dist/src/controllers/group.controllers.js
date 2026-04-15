@@ -1,18 +1,65 @@
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
-import { addUserToGroupService, createGroupService, deleteGroupService, getGroupService, removeUserFromGroupService } from "../services/group.services.js";
+import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
+import { applicationConfig } from "../constant.js";
+/** FormData sends JSON fields as strings; JSON bodies send arrays — support both */
+function parseUserConnectList(raw) {
+    if (raw == null || raw === "") {
+        return [];
+    }
+    try {
+        const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+        return parsed.map((item) => ({ id: item.id }));
+    }
+    catch {
+        return [];
+    }
+}
 export const createGroupController = AsyncHandler(async (req, res, next) => {
-    const { name, description, category, image, groupAdmins, groupMembers } = req.body;
+    let image = "";
+    if (req.file && req.file.filename) {
+        image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
+    }
+    const { name, description, category, groupAdmins, groupMembers } = req.body;
     const data = {
         name,
         description,
         category,
         image,
-        admins: { connect: groupAdmins.map((admin) => ({ id: admin.id })) },
-        members: { connect: groupMembers.map((member) => ({ id: member.id })) },
+        admins: { connect: parseUserConnectList(groupAdmins) },
+        members: { connect: parseUserConnectList(groupMembers) },
     };
     const group = await createGroupService(data);
     return SuccessHandler(res, { group }, "Group created successfully", "201");
+});
+export const updateGroupController = AsyncHandler(async (req, res, next) => {
+    const { id } = req.params;
+    let image = "";
+    if (req.file && req.file.filename) {
+        image = `${applicationConfig.BASE_URL}/${req.file.filename}`;
+    }
+    const { name, description, category, groupAdmins, groupMembers } = req.body;
+    const data = {
+        name,
+        description,
+        category,
+        image,
+        admins: { connect: parseUserConnectList(groupAdmins) },
+        members: { connect: parseUserConnectList(groupMembers) },
+    };
+    const group = await updateGroupService(id, data);
+    if (!group) {
+        return next({
+            statusCode: 400,
+            message: "Failed to update group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { group }, "Group updated successfully", "200");
 });
 export const getGroupController = AsyncHandler(async (req, res, next) => {
     const { id } = req.params;
@@ -42,8 +89,8 @@ export const deleteGroupController = AsyncHandler(async (req, res, next) => {
 });
 export const addUserToGroupController = AsyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const { userId } = req.body;
-    const group = await addUserToGroupService(id, userId);
+    const { userIds } = req.body;
+    const group = await addUserToGroupService(id, userIds);
     if (!group) {
         return next({
             statusCode: 400,
@@ -67,5 +114,36 @@ export const removeUserFromGroupController = AsyncHandler(async (req, res, next)
         });
     }
     return SuccessHandler(res, { group }, "User removed from group successfully", "200");
+});
+export const getAuthUserGroupsController = AsyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
+    const groups = await getAuthUserGroupsService(userId);
+    if (!groups) {
+        return next({
+            statusCode: 400,
+            message: "Failed to fetch groups",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { groups }, "Groups fetched successfully", "200");
+});
+export const editUserInGroupController = AsyncHandler(async (req, res, next) => {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    const data = req.body;
+    if (req.file && req.file.filename) {
+        data.image = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+    const group = await editUserInGroupService(id, data);
+    if (!group) {
+        return next({
+            statusCode: 400,
+            message: "Failed to edit user in group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { group }, "User edited in group successfully", "200");
 });
 //# sourceMappingURL=group.controllers.js.map

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changePasswordController, createUserController, deleteUserController, forgetPasswordController, getUserController, loginUserController, resendOtpController, resetPasswordController, updateUserController, verifyOtpController } from "../controllers/user.controllers.js";
+import { changePasswordController, createUserController, deleteUserController, forgetPasswordController, getUserController, getUserWithSearchController, loginUserController, resendOtpController, resetPasswordController, updateUserController, verifyOtpController } from "../controllers/user.controllers.js";
 import { AuthHandler } from "../middlewares/AuthHandler.js";
 import { upload } from "../config/fileUpload.js";
 const router = Router();
@@ -14,5 +14,6 @@ router.delete("/delete-user", deleteUserController);
 router.get("/get-auth-user", getUserController);
 router.put("/change-password", changePasswordController);
 router.put("/update-user", upload.single("profilePicture"), updateUserController);
+router.get("/get-user-with-search/search", getUserWithSearchController);
 export default router;
 //# sourceMappingURL=user.routes.js.map
