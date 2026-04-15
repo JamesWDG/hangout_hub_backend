@@ -61,16 +61,20 @@ export const editUserInGroupService = async (id, data) => {
 };
 export const getAllGroupsService = async (page, limit, category, search, userId) => {
     const skip = (page - 1) * limit;
-    const whereClause = {
-        ...(category ? { category: { contains: category, mode: "insensitive" } } : {}),
-        ...(search ? {
-            OR: [
-                { name: { contains: search, mode: "insensitive" } },
-                { description: { contains: search, mode: "insensitive" } },
-                { category: { contains: search, mode: "insensitive" } },
-            ],
-        } : {}),
-    };
+    const whereClause = {};
+    if (category) {
+        whereClause.category = { contains: category, mode: "insensitive" };
+    }
+    if (userId) {
+        whereClause.admins = { none: { id: userId } };
+    }
+    if (search) {
+        whereClause.OR = [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+            { category: { contains: search, mode: "insensitive" } },
+        ];
+    }
     const groups = await prisma.group.findMany({
         where: whereClause,
         skip,

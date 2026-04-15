@@ -1,4 +1,5 @@
 import type { GroupType } from "../types/group.types.js";
+import type { Prisma } from "../../generated/prisma/client.js";
 import { prisma } from "../lib/prisma.js";
 export const createGroupService = async (groupData: GroupType) => {
     const group = await prisma.group.create({
@@ -78,17 +79,20 @@ export const getAllGroupsService = async (
     userId: string,
 ) => {
     const skip = (page - 1) * limit;
-    const whereClause = {
-        ...(category ? { category: { contains: category, mode: "insensitive" as const } } : {}),
-        ...(userId ? { admins: { some: { id: !userId } } } : {}),
-        ...(search ? {
-            OR: [
-                { name: { contains: search, mode: "insensitive" as const } },
-                { description: { contains: search, mode: "insensitive" as const } },
-                { category: { contains: search, mode: "insensitive" as const } },
-            ],
-        } : {}),
-    };
+    const whereClause: Prisma.GroupWhereInput = {};
+    if (category) {
+        whereClause.category = { contains: category, mode: "insensitive" };
+    }
+    if (userId) {
+        whereClause.admins = { none: { id: userId } };
+    }
+    if (search) {
+        whereClause.OR = [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+            { category: { contains: search, mode: "insensitive" } },
+        ];
+    }
 
     const groups = await prisma.group.findMany({
         where: whereClause,
