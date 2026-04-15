@@ -195,6 +195,7 @@ export const editUserInGroupController = AsyncHandler(async (req, res, next) => 
     return SuccessHandler(res, { group }, "User edited in group successfully", "200");
 });
 export const getAllGroupsController = AsyncHandler(async (req, res, next) => {
+    console.log(req.query, "DSfbdiuy");
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const category = typeof req.query.category === "string" ? req.query.category : "";

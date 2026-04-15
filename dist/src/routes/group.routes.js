@@ -14,6 +14,6 @@ router.post("/:id/edit-user", upload.single("image"), editUserInGroupController)
 router.get("/:id", getGroupController);
 router.put("/:id", optionalImageUpload, updateGroupController);
 router.delete("/:id", deleteGroupController);
-router.get("/get-all-groups", getAllGroupsController);
+router.get("/public/get/get-all-groups-with-search", getAllGroupsController);
 export default router;
 //# sourceMappingURL=group.routes.js.map

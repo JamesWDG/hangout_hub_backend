@@ -61,22 +61,31 @@ export const editUserInGroupService = async (id, data) => {
 };
 export const getAllGroupsService = async (page, limit, category, search) => {
     const skip = (page - 1) * limit;
-    const groups = await prisma.group.findMany({
-        where: {
-            category: { contains: category, mode: "insensitive" },
+    const whereClause = {
+        ...(category ? { category: { contains: category, mode: "insensitive" } } : {}),
+        ...(search ? {
             OR: [
                 { name: { contains: search, mode: "insensitive" } },
                 { description: { contains: search, mode: "insensitive" } },
                 { category: { contains: search, mode: "insensitive" } },
             ],
-        },
-        skip: (page - 1) * limit,
+        } : {}),
+    };
+    const groups = await prisma.group.findMany({
+        where: whereClause,
+        skip,
         take: limit,
         include: {
             admins: true,
             members: true,
         },
     });
-    return groups;
+    const total = await prisma.group.count({ where: whereClause });
+    return {
+        groups,
+        total,
+        page,
+        limit,
+    };
 };
 //# sourceMappingURL=group.services.js.map

@@ -212,10 +212,13 @@ export const editUserInGroupController = AsyncHandler(async (req: Request, res: 
 });
 
 export const getAllGroupsController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+
+    console.log(req.query , "DSfbdiuy")
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const category = typeof req.query.category === "string" ? req.query.category : "";
     const search = typeof req.query.search === "string" ? req.query.search : "";
+
     const groups = await getAllGroupsService(page, limit, category, search);
     if(!groups){
         return next({

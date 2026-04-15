@@ -131,42 +131,47 @@ export declare const editUserInGroupService: (id: string, data: any) => Promise<
     description: string;
     category: string;
 }>;
-export declare const getAllGroupsService: (page: number, limit: number, category: string, search: string) => Promise<({
-    admins: {
+export declare const getAllGroupsService: (page: number, limit: number, category: string, search: string) => Promise<{
+    groups: ({
+        admins: {
+            id: string;
+            email: string;
+            password: string;
+            firstName: string;
+            lastName: string;
+            phone: string;
+            profilePicture: string | null;
+            isVerified: boolean;
+            bio: string | null;
+            eventsOfInterest: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+        members: {
+            id: string;
+            email: string;
+            password: string;
+            firstName: string;
+            lastName: string;
+            phone: string;
+            profilePicture: string | null;
+            isVerified: boolean;
+            bio: string | null;
+            eventsOfInterest: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
+    } & {
         id: string;
-        email: string;
-        password: string;
-        firstName: string;
-        lastName: string;
-        phone: string;
-        profilePicture: string | null;
-        isVerified: boolean;
-        bio: string | null;
-        eventsOfInterest: string | null;
         createdAt: Date;
         updatedAt: Date;
-    }[];
-    members: {
-        id: string;
-        email: string;
-        password: string;
-        firstName: string;
-        lastName: string;
-        phone: string;
-        profilePicture: string | null;
-        isVerified: boolean;
-        bio: string | null;
-        eventsOfInterest: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-    }[];
-} & {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    name: string;
-    image: string;
-    description: string;
-    category: string;
-})[]>;
+        name: string;
+        image: string;
+        description: string;
+        category: string;
+    })[];
+    total: number;
+    page: number;
+    limit: number;
+}>;
 //# sourceMappingURL=group.services.d.ts.map
