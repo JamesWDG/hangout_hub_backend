@@ -1,7 +1,7 @@
 import type { NextFunction , Request , Response } from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
-import { acceptOrRejectJoinRequestService, createJoinRequestService, deleteJoinRequestService, getAllJoinRequestsForAGroupService } from "../services/joinRequest.services.js";
+import { acceptOrRejectJoinRequestService, createJoinRequestService, deleteJoinRequestService, getAllJoinRequestsForAGroupService, leaveGroupService } from "../services/joinRequest.services.js";
 import type { JoinRequestType } from "../types/joinRequest.types.js";
 
 export const createJoinRequestController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
@@ -9,6 +9,19 @@ export const createJoinRequestController = AsyncHandler(async (req: Request, res
 
     const joinRequest = await createJoinRequestService(userId as string, groupId as string , status as string);
     return SuccessHandler(res, { joinRequest }, "Join request created successfully", "201");
+});
+export const leaveGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const { userId, groupId } : JoinRequestType = req.body as unknown as JoinRequestType;
+    const joinRequest = await leaveGroupService(userId as string, groupId as string);
+    if(!joinRequest){
+        return next({
+            statusCode: 400,
+            message: "Failed to leave group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { joinRequest }, "Group left successfully", "200");
 });
 
 
@@ -38,6 +51,7 @@ export const acceptOrRejectJoinRequestController = AsyncHandler(async (req: Requ
             status: "400",
         });
     }
+    
     await deleteJoinRequestService(id as string);
     return SuccessHandler(res, { joinRequest }, "Join request accepted or rejected successfully", "200");
 });

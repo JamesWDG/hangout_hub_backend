@@ -11,7 +11,7 @@ app.use(express.static('uploads'));
 const mountApi = (base: string) => {
     app.use(`${base}/user`, userRoutes);
     app.use(`${base}/group`, groupRoutes);
-    app.use(`${base}/joinRequest`, joinRequestRoutes);
+    app.use(`${base}/join`, joinRequestRoutes);
 };
 
 // Full path: /api/v1/...
