@@ -1,8 +1,8 @@
 import { prisma } from "../lib/prisma.js";
 
-export const createJoinRequestService = async (userId: string, groupId: string, status: string) => {
+export const createJoinRequestService = async (userId: string, groupId: string, status?: string) => {
     const joinRequest = await prisma.joinRequest.create({
-        data: { userId, groupId, status },
+        data: { userId, groupId, status: status ?? "pending" },
     });
     return joinRequest;
 };
@@ -17,9 +17,24 @@ export const getAllJoinRequestsForAGroupService = async (groupId: string) => {
     });
     return joinRequests;
 };
-export const acceptOrRejectJoinRequestService = async (id: string, status: string) => {
+/** Resolve by join-request id, or by group id + applicant userId (same `:id` as GET /join/:id). */
+export const acceptOrRejectJoinRequestService = async (
+    id: string,
+    status: string,
+    applicantUserId?: string,
+) => {
+    let row =
+        (await prisma.joinRequest.findUnique({ where: { id } })) ??
+        (applicantUserId
+            ? await prisma.joinRequest.findFirst({
+                  where: { groupId: id, userId: applicantUserId },
+              })
+            : null);
+    if (!row) {
+        return null;
+    }
     const joinRequest = await prisma.joinRequest.update({
-        where: { id },
+        where: { id: row.id },
         data: { status },
     });
     if (status === "accepted") {

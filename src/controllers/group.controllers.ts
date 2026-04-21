@@ -120,7 +120,7 @@ export const updateGroupController = AsyncHandler(async (req: Request, res: Resp
 export const getGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { id } = req.params;
     const userId = (req as Request & { user: { id: string } }).user.id;
-    const group = await getGroupService (id as string);
+    const group = await getGroupService(id as string, userId);
     if(!group){
         return next({
             statusCode: 400,

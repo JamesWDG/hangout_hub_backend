@@ -15,15 +15,27 @@ export const updateGroupService = async (id: string, groupData: GroupType) => {
     });
     return group;
 };
-export const getGroupService = async (id: string) => {
-    const group = await prisma.group.findUnique({
-        where: { id },
-        include: {
-            admins: true,
-            members: true,
-        },
-    });
-    return group;
+export const getGroupService = async (id: string, userId: string) => {
+    const [group, joinRequest] = await Promise.all([
+        prisma.group.findUnique({
+            where: { id },
+            include: {
+                admins: true,
+                members: true,
+            },
+        }),
+        prisma.joinRequest.findFirst({
+            where: { userId, groupId: id },
+            select: { status: true },
+        }),
+    ]);
+    if (!group) {
+        return null;
+    }
+    return {
+        ...group,
+        myJoinRequestStatus: joinRequest?.status ?? null,
+    };
 };
 
 export const deleteGroupService = async (id: string) => {

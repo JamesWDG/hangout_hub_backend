@@ -7,7 +7,7 @@ import type { JoinRequestType } from "../types/joinRequest.types.js";
 export const createJoinRequestController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { userId, groupId , status } : JoinRequestType = req.body as unknown as JoinRequestType;
 
-    const joinRequest = await createJoinRequestService(userId as string, groupId as string , status as string);
+    const joinRequest = await createJoinRequestService(userId as string, groupId as string, status);
     return SuccessHandler(res, { joinRequest }, "Join request created successfully", "201");
 });
 export const leaveGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
