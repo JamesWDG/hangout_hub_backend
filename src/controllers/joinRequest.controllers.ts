@@ -12,7 +12,11 @@ export const createJoinRequestController = AsyncHandler(async (req: Request, res
 });
 export const leaveGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { userId, groupId } : JoinRequestType = req.body as unknown as JoinRequestType;
+   
+    console.log(userId, groupId);
+   
     const joinRequest = await leaveGroupService(userId as string, groupId as string);
+    console.log(joinRequest);
     if(!joinRequest){
         return next({
             statusCode: 400,

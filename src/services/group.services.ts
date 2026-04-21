@@ -34,7 +34,10 @@ export const getGroupService = async (id: string, userId: string) => {
     }
     return {
         ...group,
-        myJoinRequestStatus: joinRequest?.status ?? null,
+        isMemberOrAdmin: group.admins.some((a) => a.id === userId) ||
+        group.members.some((m) => m.id === userId),
+        myJoinRequestStatus:  group.admins.some((a) => a.id === userId) ||
+        group.members.some((m) => m.id === userId) ? true:joinRequest?.status ?? false,
     };
 };
 
@@ -117,17 +120,38 @@ export const getAllGroupsService = async (
     });
     const total = await prisma.group.count({ where: whereClause });
 
-    const groupsWithMembership = groups.map((group) => ({
-        ...group,
-        isMemberOrAdmin:
-            group.admins.some((a) => a.id === userId) ||
-            group.members.some((m) => m.id === userId),
-    }));
+    const groupsWithMembership = await Promise.all(groups.map(async (group) => {
+        const joinRequest = await prisma.joinRequest.findFirst({
+            where: { userId, groupId: group.id },
+            select: { status: true },
+        })
+        return {
+            ...group,
+            isMemberOrAdmin:
+                group.admins.some((a) => a.id === userId) ||
+                group.members.some((m) => m.id === userId),
+            myJoinRequestStatus:  group.admins.some((a) => a.id === userId) ||
+            group.members.some((m) => m.id === userId) ? true:joinRequest?.status ?? false,
+        };
+    })) ;
+    return groupsWithMembership;
+};
 
-    return {
-        groups: groupsWithMembership,
-        total,
-        page,
-        limit,
-    };
+export const leaveGroupService = async (userId: string, groupId: string) => {
+    const group = await prisma.group.update({
+        where: { id: groupId },
+        data: { members: { disconnect: { id: userId } } },
+    });
+    return group;
+};
+
+export const getMyJoinRequestsService = async (userId: string) => {
+   const groups = await prisma.group.findMany({
+    where: { members: { some: { id: userId } } },
+    include: {
+        admins: true,
+        members: true,
+    },
+   });
+   return groups;
 };

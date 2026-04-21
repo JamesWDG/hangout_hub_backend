@@ -1,7 +1,7 @@
 import type { NextFunction  , Response , Request} from "express";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import type { GroupType } from "../types/group.types.js";
-import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAllGroupsService, getAuthUserGroupsService, getGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
+import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAllGroupsService, getAuthUserGroupsService, getGroupService, getMyJoinRequestsService, leaveGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 import { applicationConfig } from "../constant.js";
 
@@ -229,4 +229,27 @@ export const getAllGroupsController = AsyncHandler(async (req: Request, res: Res
         });
     }
     return SuccessHandler(res, { groups }, "Groups fetched successfully", "200");
+});
+
+export const leaveGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const { id } = req.params;
+    const userId = (req as Request & { user: { id: string } }).user.id;
+    const group = await leaveGroupService(userId as string, id as string);
+    if(!group){
+        return next({
+            statusCode: 400,
+            message: "Failed to leave group",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    return SuccessHandler(res, { group }, "Group left successfully", "200");
+});
+
+
+export const getMyJoinGroupsController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
+    const userId = (req as Request & { user: { id: string } }).user.id;
+    const groups = await getMyJoinRequestsService(userId as string);
+ 
+    return SuccessHandler(res, { groups }, "Join requests fetched successfully", "200");
 });

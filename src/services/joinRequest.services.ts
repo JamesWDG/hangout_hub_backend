@@ -60,6 +60,7 @@ export const deleteJoinRequestService = async (id: string) => {
 };
 
 export const leaveGroupService = async (userId: string, groupId: string) => {
+  
     const existing = await prisma.joinRequest.findFirst({
         where: { userId, groupId },
     });
