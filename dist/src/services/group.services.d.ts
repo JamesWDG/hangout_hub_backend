@@ -17,7 +17,9 @@ export declare const updateGroupService: (id: string, groupData: GroupType) => P
     description: string;
     category: string;
 }>;
-export declare const getGroupService: (id: string) => Promise<({
+export declare const getGroupService: (id: string, userId: string) => Promise<{
+    isMemberOrAdmin: boolean;
+    myJoinRequestStatus: string | boolean;
     admins: {
         id: string;
         email: string;
@@ -46,7 +48,6 @@ export declare const getGroupService: (id: string) => Promise<({
         createdAt: Date;
         updatedAt: Date;
     }[];
-} & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -54,7 +55,7 @@ export declare const getGroupService: (id: string) => Promise<({
     image: string;
     description: string;
     category: string;
-}) | null>;
+} | null>;
 export declare const deleteGroupService: (id: string) => Promise<{
     id: string;
     createdAt: Date;
@@ -132,46 +133,89 @@ export declare const editUserInGroupService: (id: string, data: any) => Promise<
     category: string;
 }>;
 export declare const getAllGroupsService: (page: number, limit: number, category: string, search: string, userId: string) => Promise<{
-    groups: {
-        isMemberOrAdmin: boolean;
-        admins: {
-            id: string;
-            email: string;
-            password: string;
-            firstName: string;
-            lastName: string;
-            phone: string;
-            profilePicture: string | null;
-            isVerified: boolean;
-            bio: string | null;
-            eventsOfInterest: string | null;
-            createdAt: Date;
-            updatedAt: Date;
-        }[];
-        members: {
-            id: string;
-            email: string;
-            password: string;
-            firstName: string;
-            lastName: string;
-            phone: string;
-            profilePicture: string | null;
-            isVerified: boolean;
-            bio: string | null;
-            eventsOfInterest: string | null;
-            createdAt: Date;
-            updatedAt: Date;
-        }[];
+    isMemberOrAdmin: boolean;
+    myJoinRequestStatus: string | boolean;
+    admins: {
         id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
         createdAt: Date;
         updatedAt: Date;
-        name: string;
-        image: string;
-        description: string;
-        category: string;
     }[];
-    total: number;
-    page: number;
-    limit: number;
+    members: {
+        id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    image: string;
+    description: string;
+    category: string;
+}[]>;
+export declare const leaveGroupService: (userId: string, groupId: string) => Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    image: string;
+    description: string;
+    category: string;
 }>;
+export declare const getMyJoinRequestsService: (userId: string) => Promise<({
+    admins: {
+        id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    members: {
+        id: string;
+        email: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        phone: string;
+        profilePicture: string | null;
+        isVerified: boolean;
+        bio: string | null;
+        eventsOfInterest: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+} & {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+    image: string;
+    description: string;
+    category: string;
+})[]>;
 //# sourceMappingURL=group.services.d.ts.map

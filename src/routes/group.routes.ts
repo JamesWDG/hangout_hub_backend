@@ -11,8 +11,8 @@ router.get("/get-auth-user-groups/groups", getAuthUserGroupsController);
 
 router.post("/create", optionalImageUpload, createGroupController);
 
-router.put("/update/:id", optionalImageUpload, updateGroupController);
-router.post("/update/:id", optionalImageUpload, updateGroupController);
+router.put("/update/:id", upload.single("image"), updateGroupController);
+router.post("/update/:id", upload.single("image"), updateGroupController);
 
 router.post("/:id/add-user", addUserToGroupController);
 router.post("/:id/remove-user", removeUserFromGroupController);

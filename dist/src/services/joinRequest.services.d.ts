@@ -1,4 +1,4 @@
-export declare const createJoinRequestService: (userId: string, groupId: string, status: string) => Promise<{
+export declare const createJoinRequestService: (userId: string, groupId: string, status?: string) => Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -38,14 +38,15 @@ export declare const getAllJoinRequestsForAGroupService: (groupId: string) => Pr
     userId: string;
     groupId: string;
 })[]>;
-export declare const acceptOrRejectJoinRequestService: (id: string, status: string) => Promise<{
+/** Resolve by join-request id, or by group id + applicant userId (same `:id` as GET /join/:id). */
+export declare const acceptOrRejectJoinRequestService: (id: string, status: string, applicantUserId?: string) => Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
     status: string;
     userId: string;
     groupId: string;
-}>;
+} | null>;
 export declare const deleteJoinRequestService: (id: string) => Promise<{
     id: string;
     createdAt: Date;
@@ -54,4 +55,20 @@ export declare const deleteJoinRequestService: (id: string) => Promise<{
     userId: string;
     groupId: string;
 }>;
+export declare const leaveGroupService: (userId: string, groupId: string) => Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    status: string;
+    userId: string;
+    groupId: string;
+} | null>;
+export declare const leaveAdminFromGroupService: (userId: string, groupId: string) => Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    status: string;
+    userId: string;
+    groupId: string;
+} | null>;
 //# sourceMappingURL=joinRequest.services.d.ts.map

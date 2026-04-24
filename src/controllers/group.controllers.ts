@@ -94,6 +94,9 @@ export const createGroupController = AsyncHandler(async (req: Request, res: Resp
 
 export const updateGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { id } = req.params;
+    console.log("req.file: ",req.file);
+    console.log("req.params: ",req.params);
+    console.log("req.body: ",req.body);
     const flat = flattenRequestBody(req);
     const imageUrl = pickGroupImageUrl(req, flat);
     const { name, description, category, groupAdmins, groupMembers } = flat as unknown as GroupType;
@@ -163,7 +166,7 @@ export const addUserToGroupController = AsyncHandler(async (req: Request, res: R
 
 export const removeUserFromGroupController = AsyncHandler(async (req: Request, res: Response , next: NextFunction) => {
     const { id } = req.params;
-    const { userId } = req.body;
+    const { userId, reason } = req.body;
     const group = await removeUserFromGroupService(id as string, userId as string);
     if(!group){
         return next({

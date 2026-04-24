@@ -12,15 +12,30 @@ export const updateGroupService = async (id, groupData) => {
     });
     return group;
 };
-export const getGroupService = async (id) => {
-    const group = await prisma.group.findUnique({
-        where: { id },
-        include: {
-            admins: true,
-            members: true,
-        },
-    });
-    return group;
+export const getGroupService = async (id, userId) => {
+    const [group, joinRequest] = await Promise.all([
+        prisma.group.findUnique({
+            where: { id },
+            include: {
+                admins: true,
+                members: true,
+            },
+        }),
+        prisma.joinRequest.findFirst({
+            where: { userId, groupId: id },
+            select: { status: true },
+        }),
+    ]);
+    if (!group) {
+        return null;
+    }
+    return {
+        ...group,
+        isMemberOrAdmin: group.admins.some((a) => a.id === userId) ||
+            group.members.some((m) => m.id === userId),
+        myJoinRequestStatus: group.admins.some((a) => a.id === userId) ||
+            group.members.some((m) => m.id === userId) ? true : joinRequest?.status ?? false,
+    };
 };
 export const deleteGroupService = async (id) => {
     const group = await prisma.group.delete({
@@ -85,16 +100,36 @@ export const getAllGroupsService = async (page, limit, category, search, userId)
         },
     });
     const total = await prisma.group.count({ where: whereClause });
-    const groupsWithMembership = groups.map((group) => ({
-        ...group,
-        isMemberOrAdmin: group.admins.some((a) => a.id === userId) ||
-            group.members.some((m) => m.id === userId),
+    const groupsWithMembership = await Promise.all(groups.map(async (group) => {
+        const joinRequest = await prisma.joinRequest.findFirst({
+            where: { userId, groupId: group.id },
+            select: { status: true },
+        });
+        return {
+            ...group,
+            isMemberOrAdmin: group.admins.some((a) => a.id === userId) ||
+                group.members.some((m) => m.id === userId),
+            myJoinRequestStatus: group.admins.some((a) => a.id === userId) ||
+                group.members.some((m) => m.id === userId) ? true : joinRequest?.status ?? false,
+        };
     }));
-    return {
-        groups: groupsWithMembership,
-        total,
-        page,
-        limit,
-    };
+    return groupsWithMembership;
+};
+export const leaveGroupService = async (userId, groupId) => {
+    const group = await prisma.group.update({
+        where: { id: groupId },
+        data: { members: { disconnect: { id: userId } } },
+    });
+    return group;
+};
+export const getMyJoinRequestsService = async (userId) => {
+    const groups = await prisma.group.findMany({
+        where: { members: { some: { id: userId } } },
+        include: {
+            admins: true,
+            members: true,
+        },
+    });
+    return groups;
 };
 //# sourceMappingURL=group.services.js.map

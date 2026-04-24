@@ -46,7 +46,7 @@ export type PrismaVersion = {
     engine: string;
 };
 /**
- * Prisma Client JS version: 7.6.0
+ * Prisma Client JS version: 7.7.0
  * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export declare const prismaVersion: PrismaVersion;
