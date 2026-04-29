@@ -159,6 +159,72 @@ export interface PrismaClient<in LogOpts extends Prisma.LogLevel = never, in out
     get joinRequest(): Prisma.JoinRequestDelegate<ExtArgs, {
         omit: OmitOpts;
     }>;
+    /**
+     * `prisma.post`: Exposes CRUD operations for the **Post** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Posts
+      * const posts = await prisma.post.findMany()
+      * ```
+      */
+    get post(): Prisma.PostDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.simplePost`: Exposes CRUD operations for the **SimplePost** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more SimplePosts
+      * const simplePosts = await prisma.simplePost.findMany()
+      * ```
+      */
+    get simplePost(): Prisma.SimplePostDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.eventPost`: Exposes CRUD operations for the **EventPost** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more EventPosts
+      * const eventPosts = await prisma.eventPost.findMany()
+      * ```
+      */
+    get eventPost(): Prisma.EventPostDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.eventRoles`: Exposes CRUD operations for the **EventRoles** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more EventRoles
+      * const eventRoles = await prisma.eventRoles.findMany()
+      * ```
+      */
+    get eventRoles(): Prisma.EventRolesDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.poll`: Exposes CRUD operations for the **Poll** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more Polls
+      * const polls = await prisma.poll.findMany()
+      * ```
+      */
+    get poll(): Prisma.PollDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
+    /**
+     * `prisma.pollOption`: Exposes CRUD operations for the **PollOption** model.
+      * Example usage:
+      * ```ts
+      * // Fetch zero or more PollOptions
+      * const pollOptions = await prisma.pollOption.findMany()
+      * ```
+      */
+    get pollOption(): Prisma.PollOptionDelegate<ExtArgs, {
+        omit: OmitOpts;
+    }>;
 }
 export declare function getPrismaClientClass(): PrismaClientConstructor;
 //# sourceMappingURL=class.d.ts.map

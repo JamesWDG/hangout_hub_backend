@@ -1,19 +1,7 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import { addUserToGroupService, createGroupService, deleteGroupService, editUserInGroupService, getAllGroupsService, getAuthUserGroupsService, getGroupService, getMyJoinRequestsService, leaveGroupService, removeUserFromGroupService, updateGroupService } from "../services/group.services.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 import { applicationConfig } from "../constant.js";
-function flattenPartsIntoOut(parts, out) {
-    if (!Array.isArray(parts)) {
-        return;
-    }
-    for (const item of parts) {
-        if (Array.isArray(item) && item.length >= 2) {
-            out[String(item[0])] = item[1];
-        }
-    }
-}
 /**
  * React Native often serializes FormData as JSON: `{ data: { _parts: [['name', v], ...] } }`.
  * That is not multipart, so multer never runs — flatten so fields + image `{ uri }` are readable.
@@ -24,13 +12,16 @@ function flattenRequestBody(req) {
         return {};
     }
     const nested = raw["data"];
-    const out = { ...raw };
     if (nested && typeof nested === "object" && nested !== null && "_parts" in nested) {
-        flattenPartsIntoOut(nested._parts, out);
-        return out;
-    }
-    if ("_parts" in raw && raw["_parts"] != null) {
-        flattenPartsIntoOut(raw["_parts"], out);
+        const parts = nested._parts;
+        const out = { ...raw };
+        if (Array.isArray(parts)) {
+            for (const item of parts) {
+                if (Array.isArray(item) && item.length >= 2) {
+                    out[String(item[0])] = item[1];
+                }
+            }
+        }
         return out;
     }
     if (nested && typeof nested === "object" && nested !== null && !("_parts" in nested)) {
@@ -38,93 +29,19 @@ function flattenRequestBody(req) {
     }
     return raw;
 }
-function getImageCandidateFromFlat(flat) {
-    return (flat["image"] ??
-        flat["Image"] ??
-        flat["coverPhoto"] ??
-        flat["CoverPhoto"] ??
-        flat["groupImage"] ??
-        flat["GroupImage"] ??
-        flat["profilePicture"] ??
-        flat["ProfilePicture"]);
-}
-function looksLikeSerializedRnFormData(req) {
-    const b = req.body;
-    if (!b || typeof b !== "object") {
-        return false;
-    }
-    const d = b.data;
-    if (d && typeof d === "object" && d !== null && "_parts" in d) {
-        return true;
-    }
-    return "_parts" in b;
-}
-async function saveBase64ImageToUploads(dataUrl) {
-    const trimmed = dataUrl.trim().replace(/\s/g, "");
-    const match = /^data:image\/([\w+.@-]+);base64,(.+)$/i.exec(trimmed);
-    const extRaw = match?.[1];
-    const b64 = match?.[2];
-    if (extRaw === undefined || b64 === undefined) {
-        throw new Error("Invalid image data URL");
-    }
-    let ext = extRaw.toLowerCase();
-    if (ext === "jpeg") {
-        ext = "jpg";
-    }
-    ext = ext.replace(/[^a-z0-9]/g, "") || "jpg";
-    const buf = Buffer.from(b64, "base64");
-    if (!buf.length) {
-        throw new Error("Empty image data");
-    }
-    const name = `${Date.now()}-group.${ext}`;
-    await mkdir("uploads", { recursive: true });
-    await writeFile(path.join("uploads", name), buf);
-    const base = (applicationConfig.BASE_URL ?? "").replace(/\/$/, "");
-    return base ? `${base}/${name}` : `/${name}`;
-}
-function buildMissingImageMessage(req, flat) {
-    const img = getImageCandidateFromFlat(flat);
-    const emptyAppend = typeof img === "object" &&
-        img !== null &&
-        !Array.isArray(img) &&
-        Object.keys(img).length === 0;
-    if (emptyAppend) {
-        return 'formData.append("image", {}) is invalid: use React Native { uri, type, name } for the file, and send FormData as the raw request body (not JSON / not { data: formData }) so Content-Type is multipart/form-data with a boundary.';
-    }
-    if (looksLikeSerializedRnFormData(req)) {
-        return "Body looks like FormData serialized as JSON (data._parts). Use axios.put(url, formData) or fetch(..., { body: formData }) without wrapping FormData in an object; only set Authorization (do not set Content-Type) so the client adds multipart boundaries.";
-    }
-    return 'Image required: multipart field "image" (or coverPhoto / groupImage / profilePicture), or JSON URL / { uri: "https://..." } / data:image/...;base64,...';
-}
-async function resolveGroupImageUrl(req, flat) {
+function pickGroupImageUrl(req, flat) {
     if (req.file?.filename) {
-        const base = (applicationConfig.BASE_URL ?? "").replace(/\/$/, "");
-        return base ? `${base}/${req.file.filename}` : `/${req.file.filename}`;
+        const base = applicationConfig.BASE_URL ?? "";
+        return `${base}/${req.file.filename}`;
     }
-    const img = getImageCandidateFromFlat(flat);
-    if (img == null || img === "") {
-        return "";
+    const img = flat["image"] ?? flat["Image"];
+    if (typeof img === "string" && img.trim()) {
+        return img.trim();
     }
-    if (typeof img === "string") {
-        const t = img.trim();
-        if (!t) {
-            return "";
-        }
-        if (t.startsWith("data:image")) {
-            return await saveBase64ImageToUploads(t);
-        }
-        return t;
-    }
-    if (typeof img === "object" && img !== null && !Array.isArray(img)) {
-        const rec = img;
-        if ("uri" in rec) {
-            const u = String(rec.uri ?? "").trim();
-            if (u.startsWith("http://") || u.startsWith("https://")) {
-                return u;
-            }
-            if (u.startsWith("data:image")) {
-                return await saveBase64ImageToUploads(u);
-            }
+    if (img && typeof img === "object" && "uri" in img) {
+        const u = String(img.uri ?? "").trim();
+        if (u.startsWith("http://") || u.startsWith("https://")) {
+            return u;
         }
     }
     return "";
@@ -147,23 +64,12 @@ function parseUserConnectList(raw) {
 }
 export const createGroupController = AsyncHandler(async (req, res, next) => {
     const flat = flattenRequestBody(req);
-    let image;
-    try {
-        image = await resolveGroupImageUrl(req, flat);
-    }
-    catch {
-        return next({
-            statusCode: 400,
-            message: "Invalid image (bad base64 data URL or corrupt payload)",
-            stack: new Error().stack,
-            status: "400",
-        });
-    }
+    const image = pickGroupImageUrl(req, flat);
     const { name, description, category, groupAdmins, groupMembers } = flat;
     if (!image) {
         return next({
             statusCode: 400,
-            message: buildMissingImageMessage(req, flat),
+            message: 'Image required: send multipart field "image", or JSON with image URL string / { "uri": "https://..." }',
             stack: new Error().stack,
             status: "400",
         });
@@ -181,19 +87,11 @@ export const createGroupController = AsyncHandler(async (req, res, next) => {
 });
 export const updateGroupController = AsyncHandler(async (req, res, next) => {
     const { id } = req.params;
+    console.log("req.file: ", req.file);
+    console.log("req.params: ", req.params);
+    console.log("req.body: ", req.body);
     const flat = flattenRequestBody(req);
-    let imageUrl;
-    try {
-        imageUrl = await resolveGroupImageUrl(req, flat);
-    }
-    catch {
-        return next({
-            statusCode: 400,
-            message: "Invalid image (bad base64 data URL or corrupt payload)",
-            stack: new Error().stack,
-            status: "400",
-        });
-    }
+    const imageUrl = pickGroupImageUrl(req, flat);
     const { name, description, category, groupAdmins, groupMembers } = flat;
     const data = {
         name,

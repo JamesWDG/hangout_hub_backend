@@ -41,4 +41,34 @@ export type Group = Prisma.GroupModel;
  *
  */
 export type JoinRequest = Prisma.JoinRequestModel;
+/**
+ * Model Post
+ *
+ */
+export type Post = Prisma.PostModel;
+/**
+ * Model SimplePost
+ *
+ */
+export type SimplePost = Prisma.SimplePostModel;
+/**
+ * Model EventPost
+ *
+ */
+export type EventPost = Prisma.EventPostModel;
+/**
+ * Model EventRoles
+ *
+ */
+export type EventRoles = Prisma.EventRolesModel;
+/**
+ * Model Poll
+ *
+ */
+export type Poll = Prisma.PollModel;
+/**
+ * Model PollOption
+ *
+ */
+export type PollOption = Prisma.PollOptionModel;
 //# sourceMappingURL=client.d.ts.map

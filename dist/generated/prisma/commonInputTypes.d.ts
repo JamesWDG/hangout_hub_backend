@@ -1,3 +1,4 @@
+import * as $Enums from "./enums.js";
 import type * as Prisma from "./internal/prismaNamespace.js";
 export type StringFilter<$PrismaModel = never> = {
     equals?: string | Prisma.StringFieldRefInput<$PrismaModel>;
@@ -98,6 +99,21 @@ export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     _count?: Prisma.NestedIntFilter<$PrismaModel>;
     _min?: Prisma.NestedDateTimeFilter<$PrismaModel>;
     _max?: Prisma.NestedDateTimeFilter<$PrismaModel>;
+};
+export type EnumPostTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostType | Prisma.EnumPostTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumPostTypeFilter<$PrismaModel> | $Enums.PostType;
+};
+export type EnumPostTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostType | Prisma.EnumPostTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumPostTypeWithAggregatesFilter<$PrismaModel> | $Enums.PostType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumPostTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumPostTypeFilter<$PrismaModel>;
 };
 export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | Prisma.StringFieldRefInput<$PrismaModel>;
@@ -210,5 +226,20 @@ export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     _count?: Prisma.NestedIntFilter<$PrismaModel>;
     _min?: Prisma.NestedDateTimeFilter<$PrismaModel>;
     _max?: Prisma.NestedDateTimeFilter<$PrismaModel>;
+};
+export type NestedEnumPostTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostType | Prisma.EnumPostTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumPostTypeFilter<$PrismaModel> | $Enums.PostType;
+};
+export type NestedEnumPostTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostType | Prisma.EnumPostTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.PostType[] | Prisma.ListEnumPostTypeFieldRefInput<$PrismaModel>;
+    not?: Prisma.NestedEnumPostTypeWithAggregatesFilter<$PrismaModel> | $Enums.PostType;
+    _count?: Prisma.NestedIntFilter<$PrismaModel>;
+    _min?: Prisma.NestedEnumPostTypeFilter<$PrismaModel>;
+    _max?: Prisma.NestedEnumPostTypeFilter<$PrismaModel>;
 };
 //# sourceMappingURL=commonInputTypes.d.ts.map

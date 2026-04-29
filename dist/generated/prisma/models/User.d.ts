@@ -197,6 +197,8 @@ export type UserWhereInput = {
     adminOfGroups?: Prisma.GroupListRelationFilter;
     joinRequests?: Prisma.JoinRequestListRelationFilter;
     memberOfGroups?: Prisma.GroupListRelationFilter;
+    posts?: Prisma.PostListRelationFilter;
+    taggedPosts?: Prisma.PostListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
@@ -214,6 +216,8 @@ export type UserOrderByWithRelationInput = {
     adminOfGroups?: Prisma.GroupOrderByRelationAggregateInput;
     joinRequests?: Prisma.JoinRequestOrderByRelationAggregateInput;
     memberOfGroups?: Prisma.GroupOrderByRelationAggregateInput;
+    posts?: Prisma.PostOrderByRelationAggregateInput;
+    taggedPosts?: Prisma.PostOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string;
@@ -234,6 +238,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     adminOfGroups?: Prisma.GroupListRelationFilter;
     joinRequests?: Prisma.JoinRequestListRelationFilter;
     memberOfGroups?: Prisma.GroupListRelationFilter;
+    posts?: Prisma.PostListRelationFilter;
+    taggedPosts?: Prisma.PostListRelationFilter;
 }, "id" | "email">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
@@ -285,6 +291,8 @@ export type UserCreateInput = {
     adminOfGroups?: Prisma.GroupCreateNestedManyWithoutAdminsInput;
     joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutUserInput;
     memberOfGroups?: Prisma.GroupCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserUncheckedCreateInput = {
     id?: string;
@@ -302,6 +310,8 @@ export type UserUncheckedCreateInput = {
     adminOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutAdminsInput;
     joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutUserInput;
     memberOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostUncheckedCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -319,6 +329,8 @@ export type UserUpdateInput = {
     adminOfGroups?: Prisma.GroupUpdateManyWithoutAdminsNestedInput;
     joinRequests?: Prisma.JoinRequestUpdateManyWithoutUserNestedInput;
     memberOfGroups?: Prisma.GroupUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -336,6 +348,8 @@ export type UserUncheckedUpdateInput = {
     adminOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutAdminsNestedInput;
     joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutUserNestedInput;
     memberOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUncheckedUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserCreateManyInput = {
     id?: string;
@@ -525,6 +539,52 @@ export type UserUpdateOneRequiredWithoutJoinRequestsNestedInput = {
     connect?: Prisma.UserWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutJoinRequestsInput, Prisma.UserUpdateWithoutJoinRequestsInput>, Prisma.UserUncheckedUpdateWithoutJoinRequestsInput>;
 };
+export type UserCreateNestedManyWithoutTaggedPostsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput> | Prisma.UserCreateWithoutTaggedPostsInput[] | Prisma.UserUncheckedCreateWithoutTaggedPostsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedPostsInput | Prisma.UserCreateOrConnectWithoutTaggedPostsInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserCreateNestedOneWithoutPostsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutPostsInput, Prisma.UserUncheckedCreateWithoutPostsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+};
+export type UserUncheckedCreateNestedManyWithoutTaggedPostsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput> | Prisma.UserCreateWithoutTaggedPostsInput[] | Prisma.UserUncheckedCreateWithoutTaggedPostsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedPostsInput | Prisma.UserCreateOrConnectWithoutTaggedPostsInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserUpdateManyWithoutTaggedPostsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput> | Prisma.UserCreateWithoutTaggedPostsInput[] | Prisma.UserUncheckedCreateWithoutTaggedPostsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedPostsInput | Prisma.UserCreateOrConnectWithoutTaggedPostsInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTaggedPostsInput | Prisma.UserUpsertWithWhereUniqueWithoutTaggedPostsInput[];
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutTaggedPostsInput | Prisma.UserUpdateWithWhereUniqueWithoutTaggedPostsInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutTaggedPostsInput | Prisma.UserUpdateManyWithWhereWithoutTaggedPostsInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
+export type UserUpdateOneRequiredWithoutPostsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutPostsInput, Prisma.UserUncheckedCreateWithoutPostsInput>;
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostsInput;
+    upsert?: Prisma.UserUpsertWithoutPostsInput;
+    connect?: Prisma.UserWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostsInput, Prisma.UserUpdateWithoutPostsInput>, Prisma.UserUncheckedUpdateWithoutPostsInput>;
+};
+export type UserUncheckedUpdateManyWithoutTaggedPostsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput> | Prisma.UserCreateWithoutTaggedPostsInput[] | Prisma.UserUncheckedCreateWithoutTaggedPostsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutTaggedPostsInput | Prisma.UserCreateOrConnectWithoutTaggedPostsInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTaggedPostsInput | Prisma.UserUpsertWithWhereUniqueWithoutTaggedPostsInput[];
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutTaggedPostsInput | Prisma.UserUpdateWithWhereUniqueWithoutTaggedPostsInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutTaggedPostsInput | Prisma.UserUpdateManyWithWhereWithoutTaggedPostsInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
 export type UserCreateWithoutAdminOfGroupsInput = {
     id?: string;
     email: string;
@@ -540,6 +600,8 @@ export type UserCreateWithoutAdminOfGroupsInput = {
     updatedAt?: Date | string;
     joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutUserInput;
     memberOfGroups?: Prisma.GroupCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserUncheckedCreateWithoutAdminOfGroupsInput = {
     id?: string;
@@ -556,6 +618,8 @@ export type UserUncheckedCreateWithoutAdminOfGroupsInput = {
     updatedAt?: Date | string;
     joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutUserInput;
     memberOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostUncheckedCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserCreateOrConnectWithoutAdminOfGroupsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -576,6 +640,8 @@ export type UserCreateWithoutMemberOfGroupsInput = {
     updatedAt?: Date | string;
     adminOfGroups?: Prisma.GroupCreateNestedManyWithoutAdminsInput;
     joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutUserInput;
+    posts?: Prisma.PostCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserUncheckedCreateWithoutMemberOfGroupsInput = {
     id?: string;
@@ -592,6 +658,8 @@ export type UserUncheckedCreateWithoutMemberOfGroupsInput = {
     updatedAt?: Date | string;
     adminOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutAdminsInput;
     joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutUserInput;
+    posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostUncheckedCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserCreateOrConnectWithoutMemberOfGroupsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -655,6 +723,8 @@ export type UserCreateWithoutJoinRequestsInput = {
     updatedAt?: Date | string;
     adminOfGroups?: Prisma.GroupCreateNestedManyWithoutAdminsInput;
     memberOfGroups?: Prisma.GroupCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserUncheckedCreateWithoutJoinRequestsInput = {
     id?: string;
@@ -671,6 +741,8 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
     updatedAt?: Date | string;
     adminOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutAdminsInput;
     memberOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput;
+    taggedPosts?: Prisma.PostUncheckedCreateNestedManyWithoutTaggedUsersInput;
 };
 export type UserCreateOrConnectWithoutJoinRequestsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -700,6 +772,8 @@ export type UserUpdateWithoutJoinRequestsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     adminOfGroups?: Prisma.GroupUpdateManyWithoutAdminsNestedInput;
     memberOfGroups?: Prisma.GroupUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateWithoutJoinRequestsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -716,6 +790,146 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     adminOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutAdminsNestedInput;
     memberOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUncheckedUpdateManyWithoutTaggedUsersNestedInput;
+};
+export type UserCreateWithoutTaggedPostsInput = {
+    id?: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    profilePicture?: string | null;
+    isVerified?: boolean;
+    bio?: string | null;
+    eventsOfInterest?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    adminOfGroups?: Prisma.GroupCreateNestedManyWithoutAdminsInput;
+    joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutUserInput;
+    memberOfGroups?: Prisma.GroupCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostCreateNestedManyWithoutUserInput;
+};
+export type UserUncheckedCreateWithoutTaggedPostsInput = {
+    id?: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    profilePicture?: string | null;
+    isVerified?: boolean;
+    bio?: string | null;
+    eventsOfInterest?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    adminOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutAdminsInput;
+    joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutUserInput;
+    memberOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput;
+    posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput;
+};
+export type UserCreateOrConnectWithoutTaggedPostsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput>;
+};
+export type UserCreateWithoutPostsInput = {
+    id?: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    profilePicture?: string | null;
+    isVerified?: boolean;
+    bio?: string | null;
+    eventsOfInterest?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    adminOfGroups?: Prisma.GroupCreateNestedManyWithoutAdminsInput;
+    joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutUserInput;
+    memberOfGroups?: Prisma.GroupCreateNestedManyWithoutMembersInput;
+    taggedPosts?: Prisma.PostCreateNestedManyWithoutTaggedUsersInput;
+};
+export type UserUncheckedCreateWithoutPostsInput = {
+    id?: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    profilePicture?: string | null;
+    isVerified?: boolean;
+    bio?: string | null;
+    eventsOfInterest?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    adminOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutAdminsInput;
+    joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutUserInput;
+    memberOfGroups?: Prisma.GroupUncheckedCreateNestedManyWithoutMembersInput;
+    taggedPosts?: Prisma.PostUncheckedCreateNestedManyWithoutTaggedUsersInput;
+};
+export type UserCreateOrConnectWithoutPostsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutPostsInput, Prisma.UserUncheckedCreateWithoutPostsInput>;
+};
+export type UserUpsertWithWhereUniqueWithoutTaggedPostsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    update: Prisma.XOR<Prisma.UserUpdateWithoutTaggedPostsInput, Prisma.UserUncheckedUpdateWithoutTaggedPostsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutTaggedPostsInput, Prisma.UserUncheckedCreateWithoutTaggedPostsInput>;
+};
+export type UserUpdateWithWhereUniqueWithoutTaggedPostsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutTaggedPostsInput, Prisma.UserUncheckedUpdateWithoutTaggedPostsInput>;
+};
+export type UserUpdateManyWithWhereWithoutTaggedPostsInput = {
+    where: Prisma.UserScalarWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutTaggedPostsInput>;
+};
+export type UserUpsertWithoutPostsInput = {
+    update: Prisma.XOR<Prisma.UserUpdateWithoutPostsInput, Prisma.UserUncheckedUpdateWithoutPostsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutPostsInput, Prisma.UserUncheckedCreateWithoutPostsInput>;
+    where?: Prisma.UserWhereInput;
+};
+export type UserUpdateToOneWithWhereWithoutPostsInput = {
+    where?: Prisma.UserWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutPostsInput, Prisma.UserUncheckedUpdateWithoutPostsInput>;
+};
+export type UserUpdateWithoutPostsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    eventsOfInterest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    adminOfGroups?: Prisma.GroupUpdateManyWithoutAdminsNestedInput;
+    joinRequests?: Prisma.JoinRequestUpdateManyWithoutUserNestedInput;
+    memberOfGroups?: Prisma.GroupUpdateManyWithoutMembersNestedInput;
+    taggedPosts?: Prisma.PostUpdateManyWithoutTaggedUsersNestedInput;
+};
+export type UserUncheckedUpdateWithoutPostsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    eventsOfInterest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    adminOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutAdminsNestedInput;
+    joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutUserNestedInput;
+    memberOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput;
+    taggedPosts?: Prisma.PostUncheckedUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUpdateWithoutAdminOfGroupsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -732,6 +946,8 @@ export type UserUpdateWithoutAdminOfGroupsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     joinRequests?: Prisma.JoinRequestUpdateManyWithoutUserNestedInput;
     memberOfGroups?: Prisma.GroupUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateWithoutAdminOfGroupsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -748,6 +964,8 @@ export type UserUncheckedUpdateWithoutAdminOfGroupsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutUserNestedInput;
     memberOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUncheckedUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateManyWithoutAdminOfGroupsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -778,6 +996,8 @@ export type UserUpdateWithoutMemberOfGroupsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     adminOfGroups?: Prisma.GroupUpdateManyWithoutAdminsNestedInput;
     joinRequests?: Prisma.JoinRequestUpdateManyWithoutUserNestedInput;
+    posts?: Prisma.PostUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateWithoutMemberOfGroupsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -794,8 +1014,60 @@ export type UserUncheckedUpdateWithoutMemberOfGroupsInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     adminOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutAdminsNestedInput;
     joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutUserNestedInput;
+    posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput;
+    taggedPosts?: Prisma.PostUncheckedUpdateManyWithoutTaggedUsersNestedInput;
 };
 export type UserUncheckedUpdateManyWithoutMemberOfGroupsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    eventsOfInterest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type UserUpdateWithoutTaggedPostsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    eventsOfInterest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    adminOfGroups?: Prisma.GroupUpdateManyWithoutAdminsNestedInput;
+    joinRequests?: Prisma.JoinRequestUpdateManyWithoutUserNestedInput;
+    memberOfGroups?: Prisma.GroupUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateWithoutTaggedPostsInput = {
+    id?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.StringFieldUpdateOperationsInput | string;
+    firstName?: Prisma.StringFieldUpdateOperationsInput | string;
+    lastName?: Prisma.StringFieldUpdateOperationsInput | string;
+    phone?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePicture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    eventsOfInterest?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    adminOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutAdminsNestedInput;
+    joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutUserNestedInput;
+    memberOfGroups?: Prisma.GroupUncheckedUpdateManyWithoutMembersNestedInput;
+    posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput;
+};
+export type UserUncheckedUpdateManyWithoutTaggedPostsInput = {
     id?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
     password?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -816,11 +1088,15 @@ export type UserCountOutputType = {
     adminOfGroups: number;
     joinRequests: number;
     memberOfGroups: number;
+    posts: number;
+    taggedPosts: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     adminOfGroups?: boolean | UserCountOutputTypeCountAdminOfGroupsArgs;
     joinRequests?: boolean | UserCountOutputTypeCountJoinRequestsArgs;
     memberOfGroups?: boolean | UserCountOutputTypeCountMemberOfGroupsArgs;
+    posts?: boolean | UserCountOutputTypeCountPostsArgs;
+    taggedPosts?: boolean | UserCountOutputTypeCountTaggedPostsArgs;
 };
 /**
  * UserCountOutputType without action
@@ -849,6 +1125,18 @@ export type UserCountOutputTypeCountJoinRequestsArgs<ExtArgs extends runtime.Typ
 export type UserCountOutputTypeCountMemberOfGroupsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.GroupWhereInput;
 };
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.PostWhereInput;
+};
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTaggedPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.PostWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     email?: boolean;
@@ -865,6 +1153,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     adminOfGroups?: boolean | Prisma.User$adminOfGroupsArgs<ExtArgs>;
     joinRequests?: boolean | Prisma.User$joinRequestsArgs<ExtArgs>;
     memberOfGroups?: boolean | Prisma.User$memberOfGroupsArgs<ExtArgs>;
+    posts?: boolean | Prisma.User$postsArgs<ExtArgs>;
+    taggedPosts?: boolean | Prisma.User$taggedPostsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -914,6 +1204,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     adminOfGroups?: boolean | Prisma.User$adminOfGroupsArgs<ExtArgs>;
     joinRequests?: boolean | Prisma.User$joinRequestsArgs<ExtArgs>;
     memberOfGroups?: boolean | Prisma.User$memberOfGroupsArgs<ExtArgs>;
+    posts?: boolean | Prisma.User$postsArgs<ExtArgs>;
+    taggedPosts?: boolean | Prisma.User$taggedPostsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {};
@@ -924,6 +1216,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         adminOfGroups: Prisma.$GroupPayload<ExtArgs>[];
         joinRequests: Prisma.$JoinRequestPayload<ExtArgs>[];
         memberOfGroups: Prisma.$GroupPayload<ExtArgs>[];
+        posts: Prisma.$PostPayload<ExtArgs>[];
+        taggedPosts: Prisma.$PostPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: string;
@@ -1270,6 +1564,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     adminOfGroups<T extends Prisma.User$adminOfGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminOfGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     joinRequests<T extends Prisma.User$joinRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$joinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     memberOfGroups<T extends Prisma.User$memberOfGroupsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$memberOfGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    posts<T extends Prisma.User$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    taggedPosts<T extends Prisma.User$taggedPostsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taggedPostsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1750,6 +2046,52 @@ export type User$memberOfGroupsArgs<ExtArgs extends runtime.Types.Extensions.Int
     take?: number;
     skip?: number;
     distinct?: Prisma.GroupScalarFieldEnum | Prisma.GroupScalarFieldEnum[];
+};
+/**
+ * User.posts
+ */
+export type User$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: Prisma.PostSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: Prisma.PostOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.PostInclude<ExtArgs> | null;
+    where?: Prisma.PostWhereInput;
+    orderBy?: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[];
+    cursor?: Prisma.PostWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[];
+};
+/**
+ * User.taggedPosts
+ */
+export type User$taggedPostsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: Prisma.PostSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: Prisma.PostOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.PostInclude<ExtArgs> | null;
+    where?: Prisma.PostWhereInput;
+    orderBy?: Prisma.PostOrderByWithRelationInput | Prisma.PostOrderByWithRelationInput[];
+    cursor?: Prisma.PostWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.PostScalarFieldEnum | Prisma.PostScalarFieldEnum[];
 };
 /**
  * User without action

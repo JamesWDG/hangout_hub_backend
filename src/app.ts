@@ -3,6 +3,7 @@ import ErrorHandler from "./middlewares/ErrorHandler.js";
 import userRoutes from "./routes/user.routes.js";
 import groupRoutes from "./routes/group.routes.js";
 import joinRequestRoutes from "./routes/joinRequest.routes.js";
+import postRoutes from "./routes/post.routes.js";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,6 +13,7 @@ const mountApi = (base: string) => {
     app.use(`${base}/user`, userRoutes);
     app.use(`${base}/group`, groupRoutes);
     app.use(`${base}/join`, joinRequestRoutes);
+    app.use(`${base}/post`, postRoutes);
 };
 
 // Full path: /api/v1/...

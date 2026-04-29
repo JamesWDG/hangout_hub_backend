@@ -7,6 +7,9 @@
 *
 * 🟢 You can import this file directly.
 */
-// This file is empty because there are no enums in the schema.
-export {};
+export const PostType = {
+    SIMPLE: 'SIMPLE',
+    EVENT: 'EVENT',
+    POLL: 'POLL'
+};
 //# sourceMappingURL=enums.js.map

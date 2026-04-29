@@ -30,6 +30,12 @@ export declare const ModelName: {
     readonly Otp: "Otp";
     readonly Group: "Group";
     readonly JoinRequest: "JoinRequest";
+    readonly Post: "Post";
+    readonly SimplePost: "SimplePost";
+    readonly EventPost: "EventPost";
+    readonly EventRoles: "EventRoles";
+    readonly Poll: "Poll";
+    readonly PollOption: "PollOption";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -81,6 +87,63 @@ export declare const JoinRequestScalarFieldEnum: {
     readonly updatedAt: "updatedAt";
 };
 export type JoinRequestScalarFieldEnum = (typeof JoinRequestScalarFieldEnum)[keyof typeof JoinRequestScalarFieldEnum];
+export declare const PostScalarFieldEnum: {
+    readonly id: "id";
+    readonly type: "type";
+    readonly userId: "userId";
+    readonly groupId: "groupId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum];
+export declare const SimplePostScalarFieldEnum: {
+    readonly id: "id";
+    readonly content: "content";
+    readonly image: "image";
+    readonly postId: "postId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type SimplePostScalarFieldEnum = (typeof SimplePostScalarFieldEnum)[keyof typeof SimplePostScalarFieldEnum];
+export declare const EventPostScalarFieldEnum: {
+    readonly id: "id";
+    readonly eventName: "eventName";
+    readonly eventDescription: "eventDescription";
+    readonly eventStartDate: "eventStartDate";
+    readonly eventEndDate: "eventEndDate";
+    readonly eventLocation: "eventLocation";
+    readonly eventImage: "eventImage";
+    readonly notes: "notes";
+    readonly postId: "postId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type EventPostScalarFieldEnum = (typeof EventPostScalarFieldEnum)[keyof typeof EventPostScalarFieldEnum];
+export declare const EventRolesScalarFieldEnum: {
+    readonly id: "id";
+    readonly roleName: "roleName";
+    readonly roleDescription: "roleDescription";
+    readonly eventPostId: "eventPostId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type EventRolesScalarFieldEnum = (typeof EventRolesScalarFieldEnum)[keyof typeof EventRolesScalarFieldEnum];
+export declare const PollScalarFieldEnum: {
+    readonly id: "id";
+    readonly pollQuestion: "pollQuestion";
+    readonly postId: "postId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type PollScalarFieldEnum = (typeof PollScalarFieldEnum)[keyof typeof PollScalarFieldEnum];
+export declare const PollOptionScalarFieldEnum: {
+    readonly id: "id";
+    readonly option: "option";
+    readonly pollId: "pollId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type PollOptionScalarFieldEnum = (typeof PollOptionScalarFieldEnum)[keyof typeof PollOptionScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

@@ -71,7 +71,13 @@ export const ModelName = {
     User: 'User',
     Otp: 'Otp',
     Group: 'Group',
-    JoinRequest: 'JoinRequest'
+    JoinRequest: 'JoinRequest',
+    Post: 'Post',
+    SimplePost: 'SimplePost',
+    EventPost: 'EventPost',
+    EventRoles: 'EventRoles',
+    Poll: 'Poll',
+    PollOption: 'PollOption'
 };
 /**
  * Enums
@@ -117,6 +123,57 @@ export const JoinRequestScalarFieldEnum = {
     userId: 'userId',
     groupId: 'groupId',
     status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const PostScalarFieldEnum = {
+    id: 'id',
+    type: 'type',
+    userId: 'userId',
+    groupId: 'groupId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const SimplePostScalarFieldEnum = {
+    id: 'id',
+    content: 'content',
+    image: 'image',
+    postId: 'postId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const EventPostScalarFieldEnum = {
+    id: 'id',
+    eventName: 'eventName',
+    eventDescription: 'eventDescription',
+    eventStartDate: 'eventStartDate',
+    eventEndDate: 'eventEndDate',
+    eventLocation: 'eventLocation',
+    eventImage: 'eventImage',
+    notes: 'notes',
+    postId: 'postId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const EventRolesScalarFieldEnum = {
+    id: 'id',
+    roleName: 'roleName',
+    roleDescription: 'roleDescription',
+    eventPostId: 'eventPostId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const PollScalarFieldEnum = {
+    id: 'id',
+    pollQuestion: 'pollQuestion',
+    postId: 'postId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const PollOptionScalarFieldEnum = {
+    id: 'id',
+    option: 'option',
+    pollId: 'pollId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

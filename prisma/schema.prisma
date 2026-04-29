@@ -12,6 +12,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PostType {
+  SIMPLE
+  EVENT
+  POLL
+}
+
 
 
 model User {
@@ -30,6 +36,8 @@ model User {
   adminOfGroups Group[] @relation("GroupAdmins")
   joinRequests JoinRequest[]
   memberOfGroups Group[] @relation("GroupMembers")
+  posts Post[] @relation("author")
+  taggedPosts Post[] @relation("taggedUsers")
 }
 
 model Otp{
@@ -53,6 +61,7 @@ model Group {
     admins User[] @relation("GroupAdmins")
     members User[] @relation("GroupMembers")
     joinRequests JoinRequest[]
+    posts Post[] @relation("group")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
@@ -71,3 +80,82 @@ model JoinRequest {
 // Post Schema 
 
 
+
+model Post {
+      id String @id @default(uuid())
+      type PostType
+      taggedUsers User[] @relation("taggedUsers")
+      userId String
+      user User @relation("author", fields: [userId], references: [id])
+      groupId String
+      group Group @relation("group", fields: [groupId], references: [id])
+      simplePost SimplePost?
+      eventPost EventPost?
+      poll Poll?
+      createdAt DateTime @default(now())
+      updatedAt DateTime @updatedAt
+
+      @@index([groupId, createdAt])
+}
+
+
+model SimplePost {
+  id String @id @default(uuid())
+  content String
+  image String?
+  postId String @unique
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+model EventPost {
+   id String @id @default(uuid())
+   eventName String
+   eventDescription String
+   eventStartDate DateTime
+   eventEndDate DateTime
+   eventLocation String
+   eventImage String?
+   notes String?
+   postId String @unique
+   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+   eventRoles EventRoles[] @relation("eventRoles")
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+}
+
+
+model EventRoles {
+  id String @id @default(uuid())
+  roleName String
+  roleDescription String
+  eventPostId String
+  eventPost EventPost @relation("eventRoles", fields: [eventPostId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+model Poll {
+  id String @id @default(uuid())
+  pollQuestion String
+  postId String @unique
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  pollOptions PollOption[] @relation("pollOptions")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model PollOption {
+  id String @id @default(uuid())
+  option String
+  pollId String
+  poll Poll @relation("pollOptions", fields: [pollId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
