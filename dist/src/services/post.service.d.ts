@@ -1,3 +1,4 @@
+import { PostType } from "../../generated/prisma/enums.js";
 type CreatePostType = "SIMPLE" | "EVENT" | "POLL";
 type EventRoleInput = {
     roleName: string;
@@ -114,7 +115,7 @@ export declare const createPostService: (input: CreatePostInput) => Promise<({
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    type: import("../../generated/prisma/enums.js").PostType;
+    type: PostType;
     userId: string;
     groupId: string;
 }) | null>;
@@ -205,11 +206,11 @@ export declare const getSinglePostService: (postId: string) => Promise<({
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    type: import("../../generated/prisma/enums.js").PostType;
+    type: PostType;
     userId: string;
     groupId: string;
 }) | null>;
-export declare const getPostsService: (page: number, limit: number, groupId?: string) => Promise<{
+export declare const getPostsService: (page: number, limit: number, groupId?: string, postType?: string) => Promise<{
     posts: ({
         user: {
             id: string;
@@ -297,7 +298,7 @@ export declare const getPostsService: (page: number, limit: number, groupId?: st
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        type: import("../../generated/prisma/enums.js").PostType;
+        type: PostType;
         userId: string;
         groupId: string;
     })[];
@@ -396,7 +397,7 @@ export declare const getAuthUserPostsService: (userId: string, page: number, lim
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        type: import("../../generated/prisma/enums.js").PostType;
+        type: PostType;
         userId: string;
         groupId: string;
     })[];

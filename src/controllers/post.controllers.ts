@@ -15,11 +15,17 @@ type CreatePostBody = {
   groupId?: string;
   type?: CreatePostType;
   taggedUsers?: unknown;
-  simplePost?: {
+  simplePost?: unknown;
+  eventPost?: unknown;
+  poll?: unknown;
+};
+
+type SimplePostPayload = {
     content?: string;
     image?: string;
   };
-  eventPost?: {
+
+type EventPostPayload = {
     eventName?: string;
     eventDescription?: string;
     eventStartDate?: string;
@@ -32,11 +38,11 @@ type CreatePostBody = {
       roleDescription?: string;
     }>;
   };
-  poll?: {
+
+type PollPayload = {
     pollQuestion?: string;
-    pollOptions?: string[];
+  pollOptions?: unknown;
   };
-};
 
 const parseTaggedUsers = (raw: unknown): string[] => {
   if (raw == null || raw === "") {
@@ -87,14 +93,51 @@ const normalizeType = (value: unknown): CreatePostType | null => {
   return null;
 };
 
+const parseJsonObject = <T extends Record<string, unknown>>(raw: unknown): T | null => {
+  if (!raw) {
+    return null;
+  }
+
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? (parsed as T) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  return typeof raw === "object" && !Array.isArray(raw) ? (raw as T) : null;
+};
+
+const parsePollOptions = (raw: unknown): string[] => {
+  if (Array.isArray(raw)) {
+    return raw.filter((item): item is string => typeof item === "string");
+  }
+
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed)
+        ? parsed.filter((item): item is string => typeof item === "string")
+        : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+};
+
 export const createPostController = AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req as Request & { user: { id: string } }).user.id;
     const body = req.body as CreatePostBody;
 
+
+
     const groupId = typeof body.groupId === "string" ? body.groupId : "";
     const type = normalizeType(body.type);
-
     if (!groupId || !type) {
       return next({
         statusCode: 400,
@@ -103,17 +146,18 @@ export const createPostController = AsyncHandler(
         status: "400",
       });
     }
-
     const taggedUserIds = parseTaggedUsers(body.taggedUsers);
+    const simplePost = parseJsonObject<SimplePostPayload>(body.simplePost);
+    const eventPost = parseJsonObject<EventPostPayload>(body.eventPost);
+    const poll = parseJsonObject<PollPayload>(body.poll);
 
     const imageFromUpload = req.file?.filename
       ? `${applicationConfig.BASE_URL ?? ""}/${req.file.filename}`
       : undefined;
 
     if (type === "SIMPLE") {
-      const content = body.simplePost?.content;
-      const image = body.simplePost?.image ?? imageFromUpload;
-
+      const content = simplePost?.content;
+      const image = simplePost?.image ?? imageFromUpload;
       if (!content || !content.trim()) {
         return next({
           statusCode: 400,
@@ -138,7 +182,6 @@ export const createPostController = AsyncHandler(
     }
 
     if (type === "EVENT") {
-      const eventPost = body.eventPost;
       const requiredFields = [
         eventPost?.eventName,
         eventPost?.eventDescription,
@@ -197,10 +240,10 @@ export const createPostController = AsyncHandler(
       return SuccessHandler(res, { post }, "Post created successfully", "201");
     }
 
-    const pollQuestion = body.poll?.pollQuestion;
-    const pollOptions = body.poll?.pollOptions;
+    const pollQuestion = poll?.pollQuestion;
+    const pollOptions = parsePollOptions(poll?.pollOptions);
 
-    if (!pollQuestion || !pollQuestion.trim() || !Array.isArray(pollOptions) || pollOptions.length < 2) {
+    if (!pollQuestion || !pollQuestion.trim() || pollOptions.length < 2) {
       return next({
         statusCode: 400,
         message: "poll.pollQuestion and at least 2 poll.pollOptions are required",
@@ -266,8 +309,10 @@ export const getPostsController = AsyncHandler(async (req: Request, res: Respons
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const groupId = typeof req.query.groupId === "string" ? req.query.groupId.trim() : "";
+  const postType = typeof req.query.postType === "string" ? req.query.postType.trim() : "";
 
-  const result = await getPostsService(page, limit, groupId || undefined);
+
+  const result = await getPostsService(page, limit, groupId || undefined, postType || undefined);
   return SuccessHandler(res, result, "Posts fetched successfully", "200");
 });
 

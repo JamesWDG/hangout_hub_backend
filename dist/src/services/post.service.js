@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import { PostType } from "../../generated/prisma/enums.js";
 const postInclude = {
     user: true,
     group: true,
@@ -14,6 +15,16 @@ const postInclude = {
             pollOptions: true,
         },
     },
+};
+const normalizePostType = (postType) => {
+    if (!postType) {
+        return undefined;
+    }
+    const normalized = postType.toUpperCase();
+    if (normalized === PostType.SIMPLE || normalized === PostType.EVENT || normalized === PostType.POLL) {
+        return normalized;
+    }
+    return undefined;
 };
 export const createPostService = async (input) => {
     const createdPost = await prisma.$transaction(async (tx) => {
@@ -93,22 +104,24 @@ export const getSinglePostService = async (postId) => {
         include: postInclude,
     });
 };
-export const getPostsService = async (page, limit, groupId) => {
+export const getPostsService = async (page, limit, groupId, postType) => {
     const safePage = Math.max(1, page);
     const safeLimit = Math.max(1, limit);
     const skip = (safePage - 1) * safeLimit;
-    const where = groupId ? { groupId } : null;
+    const normalizedType = normalizePostType(postType);
+    const where = {
+        ...(groupId ? { groupId } : {}),
+        ...(normalizedType ? { type: normalizedType } : {}),
+    };
     const [posts, total] = await Promise.all([
         prisma.post.findMany({
-            ...(where ? { where } : {}),
+            where,
+            include: postInclude,
             skip,
             take: safeLimit,
             orderBy: { createdAt: "desc" },
-            include: postInclude,
         }),
-        prisma.post.count({
-            ...(where ? { where } : {}),
-        }),
+        prisma.post.count({ where }),
     ]);
     return {
         posts,

@@ -45,6 +45,38 @@ const normalizeType = (value) => {
     }
     return null;
 };
+const parseJsonObject = (raw) => {
+    if (!raw) {
+        return null;
+    }
+    if (typeof raw === "string") {
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : null;
+        }
+        catch {
+            return null;
+        }
+    }
+    return typeof raw === "object" && !Array.isArray(raw) ? raw : null;
+};
+const parsePollOptions = (raw) => {
+    if (Array.isArray(raw)) {
+        return raw.filter((item) => typeof item === "string");
+    }
+    if (typeof raw === "string") {
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed)
+                ? parsed.filter((item) => typeof item === "string")
+                : [];
+        }
+        catch {
+            return [];
+        }
+    }
+    return [];
+};
 export const createPostController = AsyncHandler(async (req, res, next) => {
     const userId = req.user.id;
     const body = req.body;
@@ -59,12 +91,15 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         });
     }
     const taggedUserIds = parseTaggedUsers(body.taggedUsers);
+    const simplePost = parseJsonObject(body.simplePost);
+    const eventPost = parseJsonObject(body.eventPost);
+    const poll = parseJsonObject(body.poll);
     const imageFromUpload = req.file?.filename
         ? `${applicationConfig.BASE_URL ?? ""}/${req.file.filename}`
         : undefined;
     if (type === "SIMPLE") {
-        const content = body.simplePost?.content;
-        const image = body.simplePost?.image ?? imageFromUpload;
+        const content = simplePost?.content;
+        const image = simplePost?.image ?? imageFromUpload;
         if (!content || !content.trim()) {
             return next({
                 statusCode: 400,
@@ -86,7 +121,6 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         return SuccessHandler(res, { post }, "Post created successfully", "201");
     }
     if (type === "EVENT") {
-        const eventPost = body.eventPost;
         const requiredFields = [
             eventPost?.eventName,
             eventPost?.eventDescription,
@@ -135,9 +169,9 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         });
         return SuccessHandler(res, { post }, "Post created successfully", "201");
     }
-    const pollQuestion = body.poll?.pollQuestion;
-    const pollOptions = body.poll?.pollOptions;
-    if (!pollQuestion || !pollQuestion.trim() || !Array.isArray(pollOptions) || pollOptions.length < 2) {
+    const pollQuestion = poll?.pollQuestion;
+    const pollOptions = parsePollOptions(poll?.pollOptions);
+    if (!pollQuestion || !pollQuestion.trim() || pollOptions.length < 2) {
         return next({
             statusCode: 400,
             message: "poll.pollQuestion and at least 2 poll.pollOptions are required",
