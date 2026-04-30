@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma.js";
-import { PostType } from "../../generated/prisma/enums.js";
+import { NotificationType, PostType } from "../../generated/prisma/enums.js";
+import { Prisma } from "../../generated/prisma/client.js";
 
 type CreatePostType = "SIMPLE" | "EVENT" | "POLL";
 
@@ -22,7 +23,8 @@ type CreatePostInput = {
     eventDescription: string;
     eventStartDate: Date;
     eventEndDate: Date;
-    eventLocation: string;
+    eventLocation: Record<string, unknown>;
+    notificationType: NotificationType;
     eventImage?: string;
     notes?: string;
     eventRoles?: EventRoleInput[];
@@ -99,7 +101,8 @@ export const createPostService = async (input: CreatePostInput) => {
           eventDescription: input.eventPost.eventDescription,
           eventStartDate: input.eventPost.eventStartDate,
           eventEndDate: input.eventPost.eventEndDate,
-          eventLocation: input.eventPost.eventLocation,
+          eventLocation: input.eventPost.eventLocation as Prisma.InputJsonObject,
+          notificationType: input.eventPost.notificationType,
           ...(input.eventPost.eventImage ? { eventImage: input.eventPost.eventImage } : {}),
           ...(input.eventPost.notes ? { notes: input.eventPost.notes } : {}),
           ...(input.eventPost.eventRoles && input.eventPost.eventRoles.length > 0

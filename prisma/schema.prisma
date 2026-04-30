@@ -18,6 +18,11 @@ enum PostType {
   POLL
 }
 
+enum NotificationType {
+  REMINDER
+  RECURRING
+}
+
 
 
 model User {
@@ -117,7 +122,8 @@ model EventPost {
    eventDescription String
    eventStartDate DateTime
    eventEndDate DateTime
-   eventLocation String
+   eventLocation Json
+   notificationType NotificationType @default(REMINDER)
    eventImage String?
    notes String?
    postId String @unique
