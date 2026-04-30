@@ -29,6 +29,7 @@ type CreatePostInput = {
   };
   poll?: {
     pollQuestion: string;
+    pollEndDate: Date;
     pollOptions: string[];
   };
 };
@@ -123,6 +124,7 @@ export const createPostService = async (input: CreatePostInput) => {
         data: {
           postId: post.id,
           pollQuestion: input.poll.pollQuestion,
+          pollEndDate: input.poll.pollEndDate,
           pollOptions: {
             create: input.poll.pollOptions.map((option) => ({ option })),
           },

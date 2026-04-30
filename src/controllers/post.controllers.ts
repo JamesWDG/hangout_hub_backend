@@ -40,9 +40,10 @@ type EventPostPayload = {
   };
 
 type PollPayload = {
-    pollQuestion?: string;
+  pollQuestion?: string;
+  pollEndDate?: string;
   pollOptions?: unknown;
-  };
+};
 
 const parseTaggedUsers = (raw: unknown): string[] => {
   if (raw == null || raw === "") {
@@ -241,12 +242,23 @@ export const createPostController = AsyncHandler(
     }
 
     const pollQuestion = poll?.pollQuestion;
+    const pollEndDate = poll?.pollEndDate;
     const pollOptions = parsePollOptions(poll?.pollOptions);
 
-    if (!pollQuestion || !pollQuestion.trim() || pollOptions.length < 2) {
+    if (!pollQuestion || !pollQuestion.trim() || !pollEndDate || !pollEndDate.trim() || pollOptions.length < 2) {
       return next({
         statusCode: 400,
-        message: "poll.pollQuestion and at least 2 poll.pollOptions are required",
+        message: "poll.pollQuestion, poll.pollEndDate and at least 2 poll.pollOptions are required",
+        stack: new Error().stack,
+        status: "400",
+      });
+    }
+
+    const parsedPollEndDate = new Date(pollEndDate);
+    if (Number.isNaN(parsedPollEndDate.getTime())) {
+      return next({
+        statusCode: 400,
+        message: "poll.pollEndDate must be a valid date string",
         stack: new Error().stack,
         status: "400",
       });
@@ -272,6 +284,7 @@ export const createPostController = AsyncHandler(
       taggedUserIds,
       poll: {
         pollQuestion: pollQuestion.trim(),
+        pollEndDate: parsedPollEndDate,
         pollOptions: normalizedOptions,
       },
     });
