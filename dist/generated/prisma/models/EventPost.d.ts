@@ -1,4 +1,5 @@
 import type * as runtime from "@prisma/client/runtime/client";
+import type * as $Enums from "../enums.js";
 import type * as Prisma from "../internal/prismaNamespace.js";
 /**
  * Model EventPost
@@ -16,7 +17,7 @@ export type EventPostMinAggregateOutputType = {
     eventDescription: string | null;
     eventStartDate: Date | null;
     eventEndDate: Date | null;
-    eventLocation: string | null;
+    notificationType: $Enums.NotificationType | null;
     eventImage: string | null;
     notes: string | null;
     postId: string | null;
@@ -29,7 +30,7 @@ export type EventPostMaxAggregateOutputType = {
     eventDescription: string | null;
     eventStartDate: Date | null;
     eventEndDate: Date | null;
-    eventLocation: string | null;
+    notificationType: $Enums.NotificationType | null;
     eventImage: string | null;
     notes: string | null;
     postId: string | null;
@@ -43,6 +44,7 @@ export type EventPostCountAggregateOutputType = {
     eventStartDate: number;
     eventEndDate: number;
     eventLocation: number;
+    notificationType: number;
     eventImage: number;
     notes: number;
     postId: number;
@@ -56,7 +58,7 @@ export type EventPostMinAggregateInputType = {
     eventDescription?: true;
     eventStartDate?: true;
     eventEndDate?: true;
-    eventLocation?: true;
+    notificationType?: true;
     eventImage?: true;
     notes?: true;
     postId?: true;
@@ -69,7 +71,7 @@ export type EventPostMaxAggregateInputType = {
     eventDescription?: true;
     eventStartDate?: true;
     eventEndDate?: true;
-    eventLocation?: true;
+    notificationType?: true;
     eventImage?: true;
     notes?: true;
     postId?: true;
@@ -83,6 +85,7 @@ export type EventPostCountAggregateInputType = {
     eventStartDate?: true;
     eventEndDate?: true;
     eventLocation?: true;
+    notificationType?: true;
     eventImage?: true;
     notes?: true;
     postId?: true;
@@ -158,7 +161,8 @@ export type EventPostGroupByOutputType = {
     eventDescription: string;
     eventStartDate: Date;
     eventEndDate: Date;
-    eventLocation: string;
+    eventLocation: runtime.JsonValue;
+    notificationType: $Enums.NotificationType;
     eventImage: string | null;
     notes: string | null;
     postId: string;
@@ -180,7 +184,8 @@ export type EventPostWhereInput = {
     eventDescription?: Prisma.StringFilter<"EventPost"> | string;
     eventStartDate?: Prisma.DateTimeFilter<"EventPost"> | Date | string;
     eventEndDate?: Prisma.DateTimeFilter<"EventPost"> | Date | string;
-    eventLocation?: Prisma.StringFilter<"EventPost"> | string;
+    eventLocation?: Prisma.JsonFilter<"EventPost">;
+    notificationType?: Prisma.EnumNotificationTypeFilter<"EventPost"> | $Enums.NotificationType;
     eventImage?: Prisma.StringNullableFilter<"EventPost"> | string | null;
     notes?: Prisma.StringNullableFilter<"EventPost"> | string | null;
     postId?: Prisma.StringFilter<"EventPost"> | string;
@@ -196,6 +201,7 @@ export type EventPostOrderByWithRelationInput = {
     eventStartDate?: Prisma.SortOrder;
     eventEndDate?: Prisma.SortOrder;
     eventLocation?: Prisma.SortOrder;
+    notificationType?: Prisma.SortOrder;
     eventImage?: Prisma.SortOrderInput | Prisma.SortOrder;
     notes?: Prisma.SortOrderInput | Prisma.SortOrder;
     postId?: Prisma.SortOrder;
@@ -214,7 +220,8 @@ export type EventPostWhereUniqueInput = Prisma.AtLeast<{
     eventDescription?: Prisma.StringFilter<"EventPost"> | string;
     eventStartDate?: Prisma.DateTimeFilter<"EventPost"> | Date | string;
     eventEndDate?: Prisma.DateTimeFilter<"EventPost"> | Date | string;
-    eventLocation?: Prisma.StringFilter<"EventPost"> | string;
+    eventLocation?: Prisma.JsonFilter<"EventPost">;
+    notificationType?: Prisma.EnumNotificationTypeFilter<"EventPost"> | $Enums.NotificationType;
     eventImage?: Prisma.StringNullableFilter<"EventPost"> | string | null;
     notes?: Prisma.StringNullableFilter<"EventPost"> | string | null;
     createdAt?: Prisma.DateTimeFilter<"EventPost"> | Date | string;
@@ -229,6 +236,7 @@ export type EventPostOrderByWithAggregationInput = {
     eventStartDate?: Prisma.SortOrder;
     eventEndDate?: Prisma.SortOrder;
     eventLocation?: Prisma.SortOrder;
+    notificationType?: Prisma.SortOrder;
     eventImage?: Prisma.SortOrderInput | Prisma.SortOrder;
     notes?: Prisma.SortOrderInput | Prisma.SortOrder;
     postId?: Prisma.SortOrder;
@@ -247,7 +255,8 @@ export type EventPostScalarWhereWithAggregatesInput = {
     eventDescription?: Prisma.StringWithAggregatesFilter<"EventPost"> | string;
     eventStartDate?: Prisma.DateTimeWithAggregatesFilter<"EventPost"> | Date | string;
     eventEndDate?: Prisma.DateTimeWithAggregatesFilter<"EventPost"> | Date | string;
-    eventLocation?: Prisma.StringWithAggregatesFilter<"EventPost"> | string;
+    eventLocation?: Prisma.JsonWithAggregatesFilter<"EventPost">;
+    notificationType?: Prisma.EnumNotificationTypeWithAggregatesFilter<"EventPost"> | $Enums.NotificationType;
     eventImage?: Prisma.StringNullableWithAggregatesFilter<"EventPost"> | string | null;
     notes?: Prisma.StringNullableWithAggregatesFilter<"EventPost"> | string | null;
     postId?: Prisma.StringWithAggregatesFilter<"EventPost"> | string;
@@ -260,7 +269,8 @@ export type EventPostCreateInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     createdAt?: Date | string;
@@ -274,7 +284,8 @@ export type EventPostUncheckedCreateInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     postId: string;
@@ -288,7 +299,8 @@ export type EventPostUpdateInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -302,7 +314,8 @@ export type EventPostUncheckedUpdateInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     postId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -316,7 +329,8 @@ export type EventPostCreateManyInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     postId: string;
@@ -329,7 +343,8 @@ export type EventPostUpdateManyMutationInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -341,7 +356,8 @@ export type EventPostUncheckedUpdateManyInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     postId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -359,6 +375,7 @@ export type EventPostCountOrderByAggregateInput = {
     eventStartDate?: Prisma.SortOrder;
     eventEndDate?: Prisma.SortOrder;
     eventLocation?: Prisma.SortOrder;
+    notificationType?: Prisma.SortOrder;
     eventImage?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     postId?: Prisma.SortOrder;
@@ -371,7 +388,7 @@ export type EventPostMaxOrderByAggregateInput = {
     eventDescription?: Prisma.SortOrder;
     eventStartDate?: Prisma.SortOrder;
     eventEndDate?: Prisma.SortOrder;
-    eventLocation?: Prisma.SortOrder;
+    notificationType?: Prisma.SortOrder;
     eventImage?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     postId?: Prisma.SortOrder;
@@ -384,7 +401,7 @@ export type EventPostMinOrderByAggregateInput = {
     eventDescription?: Prisma.SortOrder;
     eventStartDate?: Prisma.SortOrder;
     eventEndDate?: Prisma.SortOrder;
-    eventLocation?: Prisma.SortOrder;
+    notificationType?: Prisma.SortOrder;
     eventImage?: Prisma.SortOrder;
     notes?: Prisma.SortOrder;
     postId?: Prisma.SortOrder;
@@ -423,6 +440,9 @@ export type EventPostUncheckedUpdateOneWithoutPostNestedInput = {
     connect?: Prisma.EventPostWhereUniqueInput;
     update?: Prisma.XOR<Prisma.XOR<Prisma.EventPostUpdateToOneWithWhereWithoutPostInput, Prisma.EventPostUpdateWithoutPostInput>, Prisma.EventPostUncheckedUpdateWithoutPostInput>;
 };
+export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType;
+};
 export type EventPostCreateNestedOneWithoutEventRolesInput = {
     create?: Prisma.XOR<Prisma.EventPostCreateWithoutEventRolesInput, Prisma.EventPostUncheckedCreateWithoutEventRolesInput>;
     connectOrCreate?: Prisma.EventPostCreateOrConnectWithoutEventRolesInput;
@@ -441,7 +461,8 @@ export type EventPostCreateWithoutPostInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     createdAt?: Date | string;
@@ -454,7 +475,8 @@ export type EventPostUncheckedCreateWithoutPostInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     createdAt?: Date | string;
@@ -480,7 +502,8 @@ export type EventPostUpdateWithoutPostInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -493,7 +516,8 @@ export type EventPostUncheckedUpdateWithoutPostInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -506,7 +530,8 @@ export type EventPostCreateWithoutEventRolesInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     createdAt?: Date | string;
@@ -519,7 +544,8 @@ export type EventPostUncheckedCreateWithoutEventRolesInput = {
     eventDescription: string;
     eventStartDate: Date | string;
     eventEndDate: Date | string;
-    eventLocation: string;
+    eventLocation: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: $Enums.NotificationType;
     eventImage?: string | null;
     notes?: string | null;
     postId: string;
@@ -545,7 +571,8 @@ export type EventPostUpdateWithoutEventRolesInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -558,7 +585,8 @@ export type EventPostUncheckedUpdateWithoutEventRolesInput = {
     eventDescription?: Prisma.StringFieldUpdateOperationsInput | string;
     eventStartDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     eventEndDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
-    eventLocation?: Prisma.StringFieldUpdateOperationsInput | string;
+    eventLocation?: Prisma.JsonNullValueInput | runtime.InputJsonValue;
+    notificationType?: Prisma.EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType;
     eventImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     postId?: Prisma.StringFieldUpdateOperationsInput | string;
@@ -596,6 +624,7 @@ export type EventPostSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
     eventStartDate?: boolean;
     eventEndDate?: boolean;
     eventLocation?: boolean;
+    notificationType?: boolean;
     eventImage?: boolean;
     notes?: boolean;
     postId?: boolean;
@@ -612,6 +641,7 @@ export type EventPostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
     eventStartDate?: boolean;
     eventEndDate?: boolean;
     eventLocation?: boolean;
+    notificationType?: boolean;
     eventImage?: boolean;
     notes?: boolean;
     postId?: boolean;
@@ -626,6 +656,7 @@ export type EventPostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
     eventStartDate?: boolean;
     eventEndDate?: boolean;
     eventLocation?: boolean;
+    notificationType?: boolean;
     eventImage?: boolean;
     notes?: boolean;
     postId?: boolean;
@@ -640,13 +671,14 @@ export type EventPostSelectScalar = {
     eventStartDate?: boolean;
     eventEndDate?: boolean;
     eventLocation?: boolean;
+    notificationType?: boolean;
     eventImage?: boolean;
     notes?: boolean;
     postId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type EventPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventName" | "eventDescription" | "eventStartDate" | "eventEndDate" | "eventLocation" | "eventImage" | "notes" | "postId" | "createdAt" | "updatedAt", ExtArgs["result"]["eventPost"]>;
+export type EventPostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventName" | "eventDescription" | "eventStartDate" | "eventEndDate" | "eventLocation" | "notificationType" | "eventImage" | "notes" | "postId" | "createdAt" | "updatedAt", ExtArgs["result"]["eventPost"]>;
 export type EventPostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     post?: boolean | Prisma.PostDefaultArgs<ExtArgs>;
     eventRoles?: boolean | Prisma.EventPost$eventRolesArgs<ExtArgs>;
@@ -670,7 +702,8 @@ export type $EventPostPayload<ExtArgs extends runtime.Types.Extensions.InternalA
         eventDescription: string;
         eventStartDate: Date;
         eventEndDate: Date;
-        eventLocation: string;
+        eventLocation: runtime.JsonValue;
+        notificationType: $Enums.NotificationType;
         eventImage: string | null;
         notes: string | null;
         postId: string;
@@ -1037,7 +1070,8 @@ export interface EventPostFieldRefs {
     readonly eventDescription: Prisma.FieldRef<"EventPost", 'String'>;
     readonly eventStartDate: Prisma.FieldRef<"EventPost", 'DateTime'>;
     readonly eventEndDate: Prisma.FieldRef<"EventPost", 'DateTime'>;
-    readonly eventLocation: Prisma.FieldRef<"EventPost", 'String'>;
+    readonly eventLocation: Prisma.FieldRef<"EventPost", 'Json'>;
+    readonly notificationType: Prisma.FieldRef<"EventPost", 'NotificationType'>;
     readonly eventImage: Prisma.FieldRef<"EventPost", 'String'>;
     readonly notes: Prisma.FieldRef<"EventPost", 'String'>;
     readonly postId: Prisma.FieldRef<"EventPost", 'String'>;

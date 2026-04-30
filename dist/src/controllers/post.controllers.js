@@ -2,6 +2,7 @@ import { AsyncHandler } from "../middlewares/AsyncHandler.js";
 import { SuccessHandler } from "../middlewares/SuccessHandler.js";
 import { createPostService, getAuthUserPostsService, getPostsService, getSinglePostService, } from "../services/post.service.js";
 import { applicationConfig } from "../constant.js";
+import { NotificationType } from "../../generated/prisma/enums.js";
 const parseTaggedUsers = (raw) => {
     if (raw == null || raw === "") {
         return [];
@@ -59,6 +60,41 @@ const parseJsonObject = (raw) => {
         }
     }
     return typeof raw === "object" && !Array.isArray(raw) ? raw : null;
+};
+const normalizeNotificationType = (raw) => {
+    if (raw === undefined || raw === null || raw === "") {
+        return "unset";
+    }
+    if (typeof raw !== "string") {
+        return "invalid";
+    }
+    const normalized = raw.trim().toUpperCase();
+    if (normalized === NotificationType.REMINDER) {
+        return NotificationType.REMINDER;
+    }
+    if (normalized === NotificationType.RECURRING) {
+        return NotificationType.RECURRING;
+    }
+    return "invalid";
+};
+const normalizeEventLocation = (raw) => {
+    let value = raw;
+    if (typeof value === "string") {
+        try {
+            value = JSON.parse(value);
+        }
+        catch {
+            return null;
+        }
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+        return null;
+    }
+    const keys = Object.keys(value);
+    if (keys.length === 0) {
+        return null;
+    }
+    return value;
 };
 const parsePollOptions = (raw) => {
     if (Array.isArray(raw)) {
@@ -121,21 +157,39 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         return SuccessHandler(res, { post }, "Post created successfully", "201");
     }
     if (type === "EVENT") {
-        const requiredFields = [
+        const requiredStrings = [
             eventPost?.eventName,
             eventPost?.eventDescription,
             eventPost?.eventStartDate,
             eventPost?.eventEndDate,
-            eventPost?.eventLocation,
         ];
-        if (requiredFields.some((value) => typeof value !== "string" || !value.trim())) {
+        if (requiredStrings.some((value) => typeof value !== "string" || !value.trim())) {
             return next({
                 statusCode: 400,
-                message: "eventPost.eventName, eventDescription, eventStartDate, eventEndDate, eventLocation are required",
+                message: "eventPost.eventName, eventDescription, eventStartDate, eventEndDate are required",
                 stack: new Error().stack,
                 status: "400",
             });
         }
+        const eventLocation = normalizeEventLocation(eventPost?.eventLocation);
+        if (!eventLocation) {
+            return next({
+                statusCode: 400,
+                message: "eventPost.eventLocation is required and must be a non-empty JSON object (e.g. address, coordinates)",
+                stack: new Error().stack,
+                status: "400",
+            });
+        }
+        const notificationTypeRaw = normalizeNotificationType(eventPost?.notificationType);
+        if (notificationTypeRaw === "invalid") {
+            return next({
+                statusCode: 400,
+                message: "eventPost.notificationType must be REMINDER or RECURRING (optional; defaults to REMINDER)",
+                stack: new Error().stack,
+                status: "400",
+            });
+        }
+        const notificationType = notificationTypeRaw === "unset" ? NotificationType.REMINDER : notificationTypeRaw;
         const roles = Array.isArray(eventPost?.eventRoles) && eventPost.eventRoles.length > 0
             ? eventPost.eventRoles
                 .filter((role) => typeof role.roleName === "string" &&
@@ -157,7 +211,8 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
                 eventDescription: eventPost.eventDescription.trim(),
                 eventStartDate: new Date(eventPost.eventStartDate),
                 eventEndDate: new Date(eventPost.eventEndDate),
-                eventLocation: eventPost.eventLocation.trim(),
+                eventLocation,
+                notificationType,
                 ...(eventPost?.eventImage || imageFromUpload
                     ? { eventImage: eventPost?.eventImage ?? imageFromUpload }
                     : {}),

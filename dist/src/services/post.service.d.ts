@@ -1,4 +1,4 @@
-import { PostType } from "../../generated/prisma/enums.js";
+import { NotificationType, PostType } from "../../generated/prisma/enums.js";
 type CreatePostType = "SIMPLE" | "EVENT" | "POLL";
 type EventRoleInput = {
     roleName: string;
@@ -18,7 +18,8 @@ type CreatePostInput = {
         eventDescription: string;
         eventStartDate: Date;
         eventEndDate: Date;
-        eventLocation: string;
+        eventLocation: Record<string, unknown>;
+        notificationType: NotificationType;
         eventImage?: string;
         notes?: string;
         eventRoles?: EventRoleInput[];
@@ -79,7 +80,8 @@ export declare const createPostService: (input: CreatePostInput) => Promise<({
         eventDescription: string;
         eventStartDate: Date;
         eventEndDate: Date;
-        eventLocation: string;
+        eventLocation: import("@prisma/client/runtime/client").JsonValue;
+        notificationType: NotificationType;
         eventImage: string | null;
         notes: string | null;
     }) | null;
@@ -171,7 +173,8 @@ export declare const getSinglePostService: (postId: string) => Promise<({
         eventDescription: string;
         eventStartDate: Date;
         eventEndDate: Date;
-        eventLocation: string;
+        eventLocation: import("@prisma/client/runtime/client").JsonValue;
+        notificationType: NotificationType;
         eventImage: string | null;
         notes: string | null;
     }) | null;
@@ -264,7 +267,8 @@ export declare const getPostsService: (page: number, limit: number, groupId?: st
             eventDescription: string;
             eventStartDate: Date;
             eventEndDate: Date;
-            eventLocation: string;
+            eventLocation: import("@prisma/client/runtime/client").JsonValue;
+            notificationType: NotificationType;
             eventImage: string | null;
             notes: string | null;
         }) | null;
@@ -364,7 +368,8 @@ export declare const getAuthUserPostsService: (userId: string, page: number, lim
             eventDescription: string;
             eventStartDate: Date;
             eventEndDate: Date;
-            eventLocation: string;
+            eventLocation: import("@prisma/client/runtime/client").JsonValue;
+            notificationType: NotificationType;
             eventImage: string | null;
             notes: string | null;
         }) | null;

@@ -12,4 +12,8 @@ export const PostType = {
     EVENT: 'EVENT',
     POLL: 'POLL'
 };
+export const NotificationType = {
+    REMINDER: 'REMINDER',
+    RECURRING: 'RECURRING'
+};
 //# sourceMappingURL=enums.js.map

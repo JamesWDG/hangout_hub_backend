@@ -120,6 +120,7 @@ export const EventPostScalarFieldEnum = {
     eventStartDate: 'eventStartDate',
     eventEndDate: 'eventEndDate',
     eventLocation: 'eventLocation',
+    notificationType: 'notificationType',
     eventImage: 'eventImage',
     notes: 'notes',
     postId: 'postId',
@@ -153,6 +154,9 @@ export const SortOrder = {
     asc: 'asc',
     desc: 'desc'
 };
+export const JsonNullValueInput = {
+    JsonNull: JsonNull
+};
 export const QueryMode = {
     default: 'default',
     insensitive: 'insensitive'
@@ -160,5 +164,10 @@ export const QueryMode = {
 export const NullsOrder = {
     first: 'first',
     last: 'last'
+};
+export const JsonNullValueFilter = {
+    DbNull: DbNull,
+    JsonNull: JsonNull,
+    AnyNull: AnyNull
 };
 //# sourceMappingURL=prismaNamespaceBrowser.js.map

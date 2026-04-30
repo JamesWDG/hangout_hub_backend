@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma.js";
-import { PostType } from "../../generated/prisma/enums.js";
+import { NotificationType, PostType } from "../../generated/prisma/enums.js";
+import { Prisma } from "../../generated/prisma/client.js";
 const postInclude = {
     user: true,
     group: true,
@@ -62,6 +63,7 @@ export const createPostService = async (input) => {
                     eventStartDate: input.eventPost.eventStartDate,
                     eventEndDate: input.eventPost.eventEndDate,
                     eventLocation: input.eventPost.eventLocation,
+                    notificationType: input.eventPost.notificationType,
                     ...(input.eventPost.eventImage ? { eventImage: input.eventPost.eventImage } : {}),
                     ...(input.eventPost.notes ? { notes: input.eventPost.notes } : {}),
                     ...(input.eventPost.eventRoles && input.eventPost.eventRoles.length > 0
