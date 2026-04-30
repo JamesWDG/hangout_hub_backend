@@ -145,6 +145,7 @@ model Poll {
   pollQuestion String
   postId String @unique
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  pollEndDate DateTime
   pollOptions PollOption[] @relation("pollOptions")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
