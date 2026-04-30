@@ -138,6 +138,7 @@ export const PollScalarFieldEnum = {
     id: 'id',
     pollQuestion: 'pollQuestion',
     postId: 'postId',
+    pollEndDate: 'pollEndDate',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

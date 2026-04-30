@@ -170,11 +170,21 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         return SuccessHandler(res, { post }, "Post created successfully", "201");
     }
     const pollQuestion = poll?.pollQuestion;
+    const pollEndDate = poll?.pollEndDate;
     const pollOptions = parsePollOptions(poll?.pollOptions);
-    if (!pollQuestion || !pollQuestion.trim() || pollOptions.length < 2) {
+    if (!pollQuestion || !pollQuestion.trim() || !pollEndDate || !pollEndDate.trim() || pollOptions.length < 2) {
         return next({
             statusCode: 400,
-            message: "poll.pollQuestion and at least 2 poll.pollOptions are required",
+            message: "poll.pollQuestion, poll.pollEndDate and at least 2 poll.pollOptions are required",
+            stack: new Error().stack,
+            status: "400",
+        });
+    }
+    const parsedPollEndDate = new Date(pollEndDate);
+    if (Number.isNaN(parsedPollEndDate.getTime())) {
+        return next({
+            statusCode: 400,
+            message: "poll.pollEndDate must be a valid date string",
             stack: new Error().stack,
             status: "400",
         });
@@ -197,6 +207,7 @@ export const createPostController = AsyncHandler(async (req, res, next) => {
         taggedUserIds,
         poll: {
             pollQuestion: pollQuestion.trim(),
+            pollEndDate: parsedPollEndDate,
             pollOptions: normalizedOptions,
         },
     });
@@ -227,7 +238,8 @@ export const getPostsController = AsyncHandler(async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const groupId = typeof req.query.groupId === "string" ? req.query.groupId.trim() : "";
-    const result = await getPostsService(page, limit, groupId || undefined);
+    const postType = typeof req.query.postType === "string" ? req.query.postType.trim() : "";
+    const result = await getPostsService(page, limit, groupId || undefined, postType || undefined);
     return SuccessHandler(res, result, "Posts fetched successfully", "200");
 });
 export const getAuthUserPostsController = AsyncHandler(async (req, res) => {

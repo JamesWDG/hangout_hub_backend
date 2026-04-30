@@ -1118,6 +1118,7 @@ export declare const PollScalarFieldEnum: {
     readonly id: "id";
     readonly pollQuestion: "pollQuestion";
     readonly postId: "postId";
+    readonly pollEndDate: "pollEndDate";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };

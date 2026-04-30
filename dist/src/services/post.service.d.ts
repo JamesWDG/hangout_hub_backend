@@ -25,6 +25,7 @@ type CreatePostInput = {
     };
     poll?: {
         pollQuestion: string;
+        pollEndDate: Date;
         pollOptions: string[];
     };
 };
@@ -96,6 +97,7 @@ export declare const createPostService: (input: CreatePostInput) => Promise<({
         updatedAt: Date;
         postId: string;
         pollQuestion: string;
+        pollEndDate: Date;
     }) | null;
     taggedUsers: {
         id: string;
@@ -187,6 +189,7 @@ export declare const getSinglePostService: (postId: string) => Promise<({
         updatedAt: Date;
         postId: string;
         pollQuestion: string;
+        pollEndDate: Date;
     }) | null;
     taggedUsers: {
         id: string;
@@ -279,6 +282,7 @@ export declare const getPostsService: (page: number, limit: number, groupId?: st
             updatedAt: Date;
             postId: string;
             pollQuestion: string;
+            pollEndDate: Date;
         }) | null;
         taggedUsers: {
             id: string;
@@ -378,6 +382,7 @@ export declare const getAuthUserPostsService: (userId: string, page: number, lim
             updatedAt: Date;
             postId: string;
             pollQuestion: string;
+            pollEndDate: Date;
         }) | null;
         taggedUsers: {
             id: string;
