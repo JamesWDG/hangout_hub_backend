@@ -173,7 +173,8 @@ export const createPostController = AsyncHandler(
     const userId = (req as Request & { user: { id: string } }).user.id;
     const body = req.body as CreatePostBody;
 
-
+    console.log("body ===> ",body);
+    console.log("req.file ===> ",req.file);
 
     const groupId = typeof body.groupId === "string" ? body.groupId : "";
     const type = normalizeType(body.type);

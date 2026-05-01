@@ -116,6 +116,8 @@ const parsePollOptions = (raw) => {
 export const createPostController = AsyncHandler(async (req, res, next) => {
     const userId = req.user.id;
     const body = req.body;
+    console.log("body ===> ", body);
+    console.log("req.file ===> ", req.file);
     const groupId = typeof body.groupId === "string" ? body.groupId : "";
     const type = normalizeType(body.type);
     if (!groupId || !type) {
